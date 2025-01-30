@@ -1,48 +1,75 @@
-import httpStatus from 'http-status';
-import {verifyToken,generateAuthTokens} from './token.service.js';
-import {getUserByEmail,getUserById,updateUserById} from './user.service.js';
-import Token from '../models/token.model.js';
+import jwt from 'jsonwebtoken';
+import bcrypt from 'bcryptjs';
+import User from '../models/user.model.js';
+import Otp from '../models/otp.model.js';
+import Token from '../models/token.model.js'; 
 import ApiError from '../utils/ApiError.js';
-import { tokenTypes } from '../config/tokens.js';
+import httpStatus from 'http-status';
+import { verifyToken, generateAuthTokens } from './token.service.js'; 
+import { sendEmail } from './email.service.js'
+import otpEmailTemplate from '../templates/otpEmailTemplate.js';
 
 /**
- * Login with username and password
- * @param {string} email
- * @param {string} password
- * @returns {Promise<User>}
+ * Login user with email and password
  */
 const loginUserWithEmailAndPassword = async (email, password) => {
-  const user = await getUserByEmail(email);
-  if (!user || !(await user.isPasswordMatch(password))) {
-    throw new ApiError(httpStatus.UNAUTHORIZED, 'Incorrect email or password');
+  const user = await User.findOne({ email });
+  if (!user || !(await bcrypt.compare(password, user.password))) {
+    throw new ApiError(httpStatus.UNAUTHORIZED, 'Invalid email or password');
   }
   return user;
 };
 
 /**
- * Logout
- * @param {string} refreshToken
- * @returns {Promise}
+ * Generate and send OTP to email
+ */
+const sendOtp = async (email) => {
+  const otp = Math.floor(100000 + Math.random() * 900000).toString(); // Generate 6-digit OTP
+  await Otp.create({ email, otp, expiresAt: Date.now() + 10 * 60 * 1000 }); // OTP valid for 10 mins
+   // ✅ Use the built-in email service to send the OTP
+   const subject = 'OTP For Step Stamp Mobile App Login';
+   const htmlContent = otpEmailTemplate(otp);
+ 
+   await sendEmail(email, subject, htmlContent);
+ 
+   return { message: 'OTP sent successfully' };
+ 
+};
+
+/**
+ * Verify OTP
+ */
+const verifyOtp = async (email, otp) => {
+  const validOtp = await Otp.findOne({ email, otp, expiresAt: { $gt: Date.now() } });
+
+  if (!validOtp) {
+    throw new ApiError(httpStatus.BAD_REQUEST, 'Invalid or expired OTP');
+  }
+
+  await Otp.deleteMany({ email }); // Remove used OTPs
+  return true;
+};
+
+/**
+ * Logout user by removing refresh token
  */
 const logout = async (refreshToken) => {
-  const refreshTokenDoc = await Token.findOne({ token: refreshToken, type: tokenTypes.REFRESH, blacklisted: false });
+  const refreshTokenDoc = await Token.findOne({ token: refreshToken, type: 'refresh', blacklisted: false });
   if (!refreshTokenDoc) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'Not found');
+    throw new ApiError(httpStatus.NOT_FOUND, 'Token not found');
   }
   await refreshTokenDoc.remove();
 };
 
 /**
- * Refresh auth tokens
- * @param {string} refreshToken
- * @returns {Promise<Object>}
+ * Refresh authentication tokens
  */
 const refreshAuth = async (refreshToken) => {
   try {
-    const refreshTokenDoc = await verifyToken(refreshToken, tokenTypes.REFRESH);
-    const user = await getUserById(refreshTokenDoc.user);
+    const refreshTokenDoc = await verifyToken(refreshToken, 'refresh');
+    const user = await User.findById(refreshTokenDoc.user);
     if (!user) {
-      throw new Error();
+      throw new ApiError(httpStatus.UNAUTHORIZED, 'User not found');
     }
     await refreshTokenDoc.remove();
     return generateAuthTokens(user);
@@ -53,48 +80,29 @@ const refreshAuth = async (refreshToken) => {
 
 /**
  * Reset password
- * @param {string} resetPasswordToken
- * @param {string} newPassword
- * @returns {Promise}
  */
-const resetPassword = async (resetPasswordToken, newPassword) => {
-  try {
-    const resetPasswordTokenDoc = await verifyToken(resetPasswordToken, tokenTypes.RESET_PASSWORD);
-    const user = await getUserById(resetPasswordTokenDoc.user);
-    if (!user) {
-      throw new Error();
-    }
-    await updateUserById(user.id, { password: newPassword });
-    await Token.deleteMany({ user: user.id, type: tokenTypes.RESET_PASSWORD });
-  } catch (error) {
-    throw new ApiError(httpStatus.UNAUTHORIZED, 'Password reset failed');
+const resetPassword = async (email, newPassword) => {
+  const user = await User.findOne({ email });
+  if (!user) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
   }
+  user.password = await bcrypt.hash(newPassword, 8);
+  await user.save();
+  return user;
 };
 
 /**
  * Verify email
- * @param {string} verifyEmailToken
- * @returns {Promise}
  */
-const verifyEmail = async (verifyEmailToken) => {
-  try {
-    const verifyEmailTokenDoc = await verifyToken(verifyEmailToken, tokenTypes.VERIFY_EMAIL);
-    const user = await getUserById(verifyEmailTokenDoc.user);
-    if (!user) {
-      throw new Error();
-    }
-    await Token.deleteMany({ user: user.id, type: tokenTypes.VERIFY_EMAIL });
-    await updateUserById(user.id, { isEmailVerified: true });
-  } catch (error) {
-    throw new ApiError(httpStatus.UNAUTHORIZED, 'Email verification failed');
+const verifyEmail = async (email) => {
+  const user = await User.findOne({ email });
+  if (!user) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
   }
+  user.isEmailVerified = true;
+  await user.save();
+  return user;
 };
 
-export {
-  loginUserWithEmailAndPassword,
-  logout,
-  refreshAuth,
-  resetPassword,
-  verifyEmail,
-};
-
+// ✅ Ensure everything is correctly exported
+export { loginUserWithEmailAndPassword, sendOtp, verifyOtp, logout, refreshAuth, resetPassword, verifyEmail };

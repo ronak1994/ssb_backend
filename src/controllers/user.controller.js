@@ -1,45 +1,39 @@
 import httpStatus from 'http-status';
-import pick from '../utils/pick.js';
-import ApiError from '../utils/ApiError.js';
 import catchAsync from '../utils/catchAsync.js';
-import * as userService  from '../services/user.service.js';
+import { sendOtp, verifyOtp, loginUserWithEmailAndPassword } from '../services/auth.service.js';
+import { createUser } from '../services/user.service.js';
 
-
-const createUser = catchAsync(async (req, res) => {
-  const user = await userService.createUser(req.body);
-  res.status(httpStatus.CREATED).send(user);
+/**
+ * Send OTP to user
+ */
+const sendOtpController = catchAsync(async (req, res) => {
+  await sendOtp(req.body.email);
+  res.status(httpStatus.OK).json({ message: 'OTP sent successfully' });
 });
 
-const getUsers = catchAsync(async (req, res) => {
-  const filter = pick(req.query, ['name', 'role']);
-  const options = pick(req.query, ['sortBy', 'limit', 'page']);
-  const result = await userService.queryUsers(filter, options);
-  res.send(result);
+/**
+ * Verify OTP
+ */
+const verifyOtpController = catchAsync(async (req, res) => {
+  await verifyOtp(req.body.email, req.body.otp);
+  res.status(httpStatus.OK).json({ message: 'OTP verified successfully' });
 });
 
-const getUser = catchAsync(async (req, res) => {
-  const user = await userService.getUserById(req.params.userId);
-  if (!user) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
-  }
-  res.send(user);
+/**
+ * Register a user
+ */
+const registerUser = catchAsync(async (req, res) => {
+  const user = await createUser(req.body);
+  res.status(httpStatus.CREATED).json({ user });
 });
 
-const updateUser = catchAsync(async (req, res) => {
-  const user = await userService.updateUserById(req.params.userId, req.body);
-  res.send(user);
+/**
+ * Login user
+ */
+const loginUser = catchAsync(async (req, res) => {
+  const { email, password } = req.body;
+  const userData = await loginUserWithEmailAndPassword(email, password);
+  res.status(httpStatus.OK).json(userData);
 });
 
-const deleteUser = catchAsync(async (req, res) => {
-  await userService.deleteUserById(req.params.userId);
-  res.status(httpStatus.NO_CONTENT).send();
-});
-
-export {
-  createUser,
-  getUsers,
-  getUser,
-  updateUser,
-  deleteUser,
-};
-
+export { sendOtpController, verifyOtpController, registerUser, loginUser };

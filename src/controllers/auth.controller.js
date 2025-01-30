@@ -1,11 +1,18 @@
 import httpStatus from 'http-status';
 import catchAsync from '../utils/catchAsync.js';
 import { createUser } from '../services/user.service.js';
-import { generateAuthTokens,generateResetPasswordToken,generateVerifyEmailToken } from '../services/token.service.js';
-import { loginUserWithEmailAndPassword,logout as logout2,refreshAuth,resetPassword as resetPassword2,verifyEmail as verifyEmail2  } from '../services/auth.service.js';
-import { sendResetPasswordEmail,sendVerificationEmail as sendVerificationEmail2  } from '../services/email.service.js';
-// import { authService, userService, tokenService, emailService } from '../services/index.js';
-// import { authService, userService, tokenService, emailService } from '../services';
+import { generateAuthTokens, generateResetPasswordToken, generateVerifyEmailToken } from '../services/token.service.js';
+import { sendResetPasswordEmail, sendVerificationEmail } from '../services/email.service.js';
+
+import { 
+  loginUserWithEmailAndPassword, 
+  sendOtp, 
+  verifyOtp, 
+  logout, 
+  refreshAuth, 
+  resetPassword, 
+  verifyEmail 
+} from '../services/auth.service.js';
 
 
 const register = catchAsync(async (req, res) => {
@@ -21,8 +28,8 @@ const login = catchAsync(async (req, res) => {
   res.send({ user, tokens });
 });
 
-const logout = catchAsync(async (req, res) => {
-  await logout2(req.body.refreshToken);
+const logoutUser = catchAsync(async (req, res) => {
+  await logout(req.body.refreshToken);
   res.status(httpStatus.NO_CONTENT).send();
 });
 
@@ -37,29 +44,29 @@ const forgotPassword = catchAsync(async (req, res) => {
   res.status(httpStatus.NO_CONTENT).send();
 });
 
-const resetPassword = catchAsync(async (req, res) => {
-  await resetPassword2(req.query.token, req.body.password);
+const resetPasswordHandler = catchAsync(async (req, res) => {
+  await resetPassword(req.query.token, req.body.password);
   res.status(httpStatus.NO_CONTENT).send();
 });
 
-const sendVerificationEmail = catchAsync(async (req, res) => {
+const sendVerificationEmailHandler = catchAsync(async (req, res) => {
   const verifyEmailToken = await generateVerifyEmailToken(req.user);
-  await sendVerificationEmail2(req.user.email, verifyEmailToken);
+  await sendVerificationEmail(req.user.email, verifyEmailToken);
   res.status(httpStatus.NO_CONTENT).send();
 });
 
-const verifyEmail = catchAsync(async (req, res) => {
-  await verifyEmail2(req.query.token);
+const verifyEmailHandler = catchAsync(async (req, res) => {
+  await verifyEmail(req.query.token);
   res.status(httpStatus.NO_CONTENT).send();
 });
 
 export {
   register,
   login,
-  logout,
+  logoutUser as logout,
   refreshTokens,
   forgotPassword,
-  resetPassword,
-  sendVerificationEmail,
-  verifyEmail,
+  resetPasswordHandler as resetPassword,
+  sendVerificationEmailHandler as sendVerificationEmail,
+  verifyEmailHandler as verifyEmail,
 };
