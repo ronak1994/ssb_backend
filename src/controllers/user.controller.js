@@ -1,6 +1,6 @@
 import httpStatus from 'http-status';
 import catchAsync from '../utils/catchAsync.js';
-import { sendOtp, verifyOtp, verifyResetOtp, loginUserWithEmailAndPassword, getUserByEmail } from '../services/auth.service.js';
+import { sendOtp, verifyOtp, verifyResetOtp, loginUserWithEmailAndPassword, loginUserWithGoogle, getUserByEmail } from '../services/auth.service.js';
 import { createUser, completeRegistration, resetPassword } from '../services/user.service.js';
 import { OAuth2Client } from 'google-auth-library';
 
@@ -13,15 +13,15 @@ const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
  * Google Login
  */
 const googleLogin = catchAsync(async (req, res) => {
-  const { token } = req.body;
+  const { googleToken } = req.body;
 
-  if (!token) {
+  if (!googleToken) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'Google token is required');
   }
 
   // Verify Google Token
   const ticket = await client.verifyIdToken({
-    idToken: token,
+    idToken: googleToken,
     audience: process.env.GOOGLE_CLIENT_ID, // Ensure it's the right client ID
   });
 
@@ -30,11 +30,11 @@ const googleLogin = catchAsync(async (req, res) => {
   console.log(`✅ Google login verified for: ${email}`);
 
   // Check if user exists
-  let user = await getUserByEmail(email);
+  let userData = await getUserByEmail(email);
 
-  if (!user) {
+  if (!userData) {
     console.log('👤 New user detected, creating...');
-    user = await createUser({
+    userData = await createUser({
       email,
       name,
       isEmailVerified: true, // No OTP needed
@@ -44,14 +44,18 @@ const googleLogin = catchAsync(async (req, res) => {
     return res.status(httpStatus.OK).json({
       newUser: true,
       message: 'Redirecting to registration page',
-      user,
+      userData,
     });
   }
 
   // If user exists, log them in
   console.log('✅ Existing user, logging in...');
-  const tokens = await generateAuthTokens(user);
-  res.status(httpStatus.OK).json({ newUser: false, user, tokens });
+ 
+  const { user, token } = await loginUserWithGoogle(email);
+
+  res.status(httpStatus.OK).json({ message: 'Login successful', user, token });
+ 
+  
 });
 
 

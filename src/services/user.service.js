@@ -43,7 +43,7 @@ const generateReferralCode = async () => {
 /**
  * Complete user registration after OTP verification
  */
-const completeRegistration = async ({ email, userId, name, phoneNumber, password, username, dateOfBirth, referredBy }) => {
+const completeRegistration = async ({ email, userId, name, decentralizedWalletAddress, phoneNumber, password, username, dateOfBirth, referredBy }) => {
   const user = await User.findOne({ userId });
 
   if (!user) throw new ApiError(httpStatus.BAD_REQUEST, 'User not found');
@@ -55,6 +55,7 @@ const completeRegistration = async ({ email, userId, name, phoneNumber, password
   user.dateOfBirth = dateOfBirth;
   user.referralCode = await generateReferralCode();
   user.referredBy = referredBy;
+  user.decentralizedWalletAddress = decentralizedWalletAddress;
 
   await user.save();
   return user;

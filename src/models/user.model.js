@@ -49,6 +49,7 @@ const userSchema = new mongoose.Schema(
     lastLogin: { type: Date, default: Date.now },
     dailyStreak: { type: Number, default: 0 },
     lastStreakUpdate: { type: Date, default: null },
+    decentralizedWalletAddress:{ type: String, trim: true },
 
     // Referral & Registration
     referralCode: { type: String, unique: true, sparse: true },

@@ -57,6 +57,20 @@ const loginUserWithEmailAndPassword = async (email, password) => {
 };
 
 
+const loginUserWithGoogle = async(email) =>{
+  const user = await User.findOne({ email });
+
+  if (!user) {
+    throw new ApiError(httpStatus.UNAUTHORIZED, 'Invalid email or password');
+  }
+    // Generate JWT token
+    const token = jwt.sign({ userId: user._id, email: user.email }, process.env.JWT_SECRET, { expiresIn: '7d' });
+
+    console.log("🔑 JWT Generated:", token);  // Debugging log
+
+    return { user, token };
+}
+
 /**
  * Generate and send OTP to email
  */
@@ -174,4 +188,4 @@ const verifyEmail = async (email) => {
 };
 
 // ✅ Ensure everything is correctly exported
-export { loginUserWithEmailAndPassword, verifyResetOtp, getUserByEmail, sendOtp, verifyOtp, logout, refreshAuth, resetPassword, verifyEmail };
+export { loginUserWithEmailAndPassword, loginUserWithGoogle, verifyResetOtp, getUserByEmail, sendOtp, verifyOtp, logout, refreshAuth, resetPassword, verifyEmail };
