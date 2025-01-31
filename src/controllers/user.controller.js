@@ -8,8 +8,9 @@ import { createUser, completeRegistration, resetPassword } from '../services/use
  */
 const checkEmail = catchAsync(async (req, res) => {
   const { email } = req.body;
+  console.log(email);
   const user = await getUserByEmail(email);
-
+   console.log(user);
   if (user) {
     // If user exists, send them to login
     res.status(httpStatus.OK).send({ exists: true, message: 'User exists. Redirecting to login.' });

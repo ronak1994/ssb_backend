@@ -11,8 +11,13 @@ import otpEmailTemplate from '../templates/otpEmailTemplate.js';
 
 /**Get user by email */
 const getUserByEmail = async (email) => {
-  let user =  await User.findOne({ email });
-  return { user };
+  try {
+    const user = await User.findOne({ email });
+    return user || null;  // Explicitly return null if user is not found
+  } catch (error) {
+    console.error("❌ Error fetching user by email:", error);
+    return null;
+  }
 };
 
 
