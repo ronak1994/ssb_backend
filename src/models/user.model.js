@@ -65,15 +65,6 @@ userSchema.index({ email: 1 });
 userSchema.index({ referralCode: 1 });
 userSchema.index({ userId: 1 }, { unique: true });
 
-/**
- * Hash password before saving
- */
-userSchema.pre('save', async function (next) {
-  if (this.isModified('password')) {
-    this.password = await bcrypt.hash(this.password, 8);
-  }
-  next();
-});
 
 // Add plugins for JSON conversion and pagination
 userSchema.plugin(toJSON);

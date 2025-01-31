@@ -96,10 +96,6 @@ const loginUser = catchAsync(async (req, res) => {
 
   const { email, password } = req.body;
 
-  if (!email || !password) {
-    throw new ApiError(httpStatus.BAD_REQUEST, 'Email and password are required');
-  }
-
   const { user, token } = await loginUserWithEmailAndPassword(email, password);
 
   res.status(httpStatus.OK).json({ message: 'Login successful', user, token });

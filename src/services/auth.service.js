@@ -36,6 +36,7 @@ const loginUserWithEmailAndPassword = async (email, password) => {
   }
 
   console.log("✅ User found in DB:", user.email); // Debugging log
+  console.log("🔍 Stored User Password Hash:", user.password);
 
   // Verify password
   const isPasswordMatch = await bcrypt.compare(password, user.password);

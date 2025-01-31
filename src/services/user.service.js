@@ -43,14 +43,15 @@ const generateReferralCode = async () => {
 /**
  * Complete user registration after OTP verification
  */
-const completeRegistration = async ({ email, userId, name, phoneNumber, password, dateOfBirth, referredBy }) => {
+const completeRegistration = async ({ email, userId, name, phoneNumber, password, username, dateOfBirth, referredBy }) => {
   const user = await User.findOne({ userId });
 
   if (!user) throw new ApiError(httpStatus.BAD_REQUEST, 'User not found');
 
   user.name = name;
+  user.username = username;
   user.phoneNumber = phoneNumber;
-  user.password = password;
+  user.password = await bcrypt.hash(password, 8);
   user.dateOfBirth = dateOfBirth;
   user.referralCode = await generateReferralCode();
   user.referredBy = referredBy;
@@ -88,9 +89,13 @@ const updateUserById = async (userId, updateBody) => {
 
 const resetPassword = async (userId, newPassword) => {
   try {
-    console.log("Received userId:", userId);  // Debugging line
-
-    if (!mongoose.Types.ObjectId.isValid(userId)) {
+    // Example userId
+    console.log("📌 Raw userId:", userId, typeof userId);
+    
+    const isValid = mongoose.Types.ObjectId.isValid(String(userId));
+    console.log("✅ Is Valid ObjectId:", isValid);
+    
+    if (!isValid) {
       throw new ApiError(httpStatus.BAD_REQUEST, 'Invalid user ID format');
     }
 
@@ -105,7 +110,7 @@ const resetPassword = async (userId, newPassword) => {
     }
 
     // Hash the new password
-    user.password = newPassword;
+    user.password = await bcrypt.hash(newPassword, 8);
 
     // Save the updated user record
     await user.save();
