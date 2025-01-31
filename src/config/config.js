@@ -23,6 +23,7 @@ const envVarsSchema = Joi.object()
     SMTP_USERNAME: Joi.string().description('username for email server'),
     SMTP_PASSWORD: Joi.string().description('password for email server'),
     EMAIL_FROM: Joi.string().description('the from field in the emails sent by the app'),
+    GOOGLE_CLIENT_ID:Joi.string().description('client id')
   })
   .unknown();
 
@@ -56,11 +57,14 @@ const config = {
       port: "465",
       auth: {
         user: "contact@stepsstamp.com",
-        pass: "afmaktmczrwzduxx",
+        pass: process.env.GMAIL_PASSWORD,
       },
     },
     from: "contact@stepsstamp.com",
   },
+  google:{
+    clientId:envVars.GOOGLE_CLIENT_ID
+  }
 };
 
 export default config;

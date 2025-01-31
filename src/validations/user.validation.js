@@ -6,6 +6,13 @@ const checkEmail = {
   }),
 };
 
+const googleLogin = {
+  body: Joi.object().keys({
+    token: Joi.string().required(),
+  }),
+};
+
+
 
 const sendOtp = {
   body: Joi.object().keys({
@@ -48,7 +55,7 @@ const register = {
     password: Joi.string().min(8).required(),
     userId:Joi.string().min(4).required(),
     dateOfBirth: Joi.date().max('now').min('1-1-1940').required(),
-    referredBy:Joi.string().min(4).max(4)
+    referredBy:Joi.string()
   }),
 };
 
@@ -59,4 +66,4 @@ const login = {
   }),
 };
 
-export { sendOtp, verifyOtp, resetPassword, verifyResetOtp, checkEmail, register, login };
+export { sendOtp, verifyOtp, googleLogin, resetPassword, verifyResetOtp, checkEmail, register, login };
