@@ -14,7 +14,8 @@ const userSchema = new mongoose.Schema(
         return this._id.toString(); // Assigns `_id` as `userId`
       },
     },
-    name: { type: String, required: true, trim: true },
+    name: { type: String, trim: true },
+    username: { type: String, trim: true },
     email: {
       type: String,
       required: true,
@@ -25,7 +26,6 @@ const userSchema = new mongoose.Schema(
     },
     password: {
       type: String,
-      required: true,
       trim: true,
       minlength: 8,
       match: [/(?=.*[a-zA-Z])(?=.*\d)/, 'Password must contain at least one letter and one number'],
@@ -33,7 +33,7 @@ const userSchema = new mongoose.Schema(
     },
     phoneNumber: { type: String, trim: true },
     profilePicture: { type: String, default: null },
-    dateOfBirth: { type: Date },
+    dateOfBirth: { type: Date, default: null },
     gender: { type: String, enum: ['Male', 'Female', 'Other'], default: 'Other' },
     country: { type: String, trim: true },
     timezone: { type: String, default: 'UTC' },

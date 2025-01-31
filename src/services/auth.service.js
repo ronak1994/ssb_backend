@@ -9,16 +9,47 @@ import { verifyToken, generateAuthTokens } from './token.service.js';
 import { sendEmail } from './email.service.js'
 import otpEmailTemplate from '../templates/otpEmailTemplate.js';
 
+/**Get user by email */
+const getUserByEmail = async (email) => {
+  let user =  await User.findOne({ email });
+  return { user };
+};
+
+
 /**
  * Login user with email and password
  */
+
 const loginUserWithEmailAndPassword = async (email, password) => {
+  console.log("🔍 Checking user login for:", email);  // Debugging log
+
+  // Find user by email
   const user = await User.findOne({ email });
-  if (!user || !(await bcrypt.compare(password, user.password))) {
+
+  if (!user) {
     throw new ApiError(httpStatus.UNAUTHORIZED, 'Invalid email or password');
   }
-  return user;
+
+  console.log("✅ User found in DB:", user.email); // Debugging log
+
+  // Verify password
+  const isPasswordMatch = await bcrypt.compare(password, user.password);
+  
+  if (!isPasswordMatch) {
+    console.log("❌ Password mismatch!");  // Debugging log
+    throw new ApiError(httpStatus.UNAUTHORIZED, 'Invalid email or password');
+  }
+
+  console.log("✅ Password matches. Generating JWT...");
+
+  // Generate JWT token
+  const token = jwt.sign({ userId: user._id, email: user.email }, process.env.JWT_SECRET, { expiresIn: '7d' });
+
+  console.log("🔑 JWT Generated:", token);  // Debugging log
+
+  return { user, token };
 };
+
 
 /**
  * Generate and send OTP to email
@@ -46,9 +77,41 @@ const verifyOtp = async (email, otp) => {
     throw new ApiError(httpStatus.BAD_REQUEST, 'Invalid or expired OTP');
   }
 
-  await Otp.deleteMany({ email }); // Remove used OTPs
-  return true;
+  await Otp.deleteMany({ email }); // Remove OTP from DB
+
+  let user = await User.findOne({ email });
+
+  if (user) {
+    // If user exists, mark email as verified
+    user.isEmailVerified = true;
+    await user.save();
+    return { user, isNewUser: false };
+  } else {
+    // If new user, return flag to proceed to registration
+    return { user: { email }, isNewUser: true };
+  }
 };
+
+
+/**
+ * Verify Reset OTP
+ */
+const verifyResetOtp = async (email, otp) => {
+  const validOtp = await Otp.findOne({ email, otp, expiresAt: { $gt: Date.now() } });
+
+  if (!validOtp) {
+    throw new ApiError(httpStatus.BAD_REQUEST, 'Invalid or expired OTP');
+  }
+
+  await Otp.deleteMany({ email }); // Remove OTP from DB
+
+  let user = await User.findOne({ email });
+
+  if (user) {
+    return { user };
+  } 
+};
+
 
 /**
  * Logout user by removing refresh token
@@ -105,4 +168,4 @@ const verifyEmail = async (email) => {
 };
 
 // ✅ Ensure everything is correctly exported
-export { loginUserWithEmailAndPassword, sendOtp, verifyOtp, logout, refreshAuth, resetPassword, verifyEmail };
+export { loginUserWithEmailAndPassword, verifyResetOtp, getUserByEmail, sendOtp, verifyOtp, logout, refreshAuth, resetPassword, verifyEmail };

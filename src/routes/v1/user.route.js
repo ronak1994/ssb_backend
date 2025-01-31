@@ -10,10 +10,13 @@ const router = express.Router();
 /***Mobile Routes***/
 /*******************/
 
-router.post('/send-otp', validate(userValidation.sendOtp), userController.sendOtpController);
+router.post('/check-email', validate(userValidation.checkEmail), userController.checkEmail);
 router.post('/verify-otp', validate(userValidation.verifyOtp), userController.verifyOtpController);
 router.post('/register', validate(userValidation.register), userController.registerUser);
 router.post('/login', validate(userValidation.login), userController.loginUser);
 
+router.post('/forgot-password', validate(userValidation.checkEmail), userController.forgotPassword);
+router.post('/verify-reset-otp', validate(userValidation.verifyResetOtp), userController.verifyResetOtpController);
+router.post('/reset-password', validate(userValidation.resetPassword), userController.resetUserPassword);
 
 export default router;
