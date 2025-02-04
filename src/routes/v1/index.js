@@ -2,6 +2,7 @@ import express from 'express';
 import authRoute from './auth.route.js';
 import userRoute from './user.route.js';
 import docsRoute from './docs.route.js';
+import blockchainRoutes from './blockchain.route.js';
 import config from '../../config/config.js';
 
 const router = express.Router();
@@ -24,6 +25,8 @@ const devRoutes = [
     route: docsRoute,
   },
 ];
+
+router.use('/blockchains', blockchainRoutes);
 
 defaultRoutes.forEach((route) => {
   router.use(route.path, route.route);

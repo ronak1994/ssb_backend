@@ -55,8 +55,9 @@ const register = {
     password: Joi.string().min(8).required(),
     userId:Joi.string().min(4).required(),
     dateOfBirth: Joi.date().max('now').min('1-1-1940').required(),
-    referredBy:Joi.string(),
-    decentralizedWalletAddress: Joi.string()
+    referredBy:Joi.string().optional().allow(''),
+    decentralizedWalletAddress: Joi.string().optional().allow('')
+
   }),
 };
 

@@ -54,8 +54,8 @@ const completeRegistration = async ({ email, userId, name, decentralizedWalletAd
   user.password = await bcrypt.hash(password, 8);
   user.dateOfBirth = dateOfBirth;
   user.referralCode = await generateReferralCode();
-  user.referredBy = referredBy;
-  user.decentralizedWalletAddress = decentralizedWalletAddress;
+  user.referredBy = referredBy || null;
+  user.decentralizedWalletAddress = decentralizedWalletAddress || null;
 
   await user.save();
   return user;
