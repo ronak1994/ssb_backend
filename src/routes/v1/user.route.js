@@ -23,6 +23,7 @@ router.post('/test', userController.test);
 
 router.post('/google-login', validate(userValidation.googleLogin), userController.googleLogin);
 
+router.patch('/update-profile',auth(),validate(userValidation.updateUser),userController.updateUser);
 
 router.post('/forgot-password', validate(userValidation.checkEmail), userController.forgotPassword);
 router.post('/verify-reset-otp', validate(userValidation.verifyResetOtp), userController.verifyResetOtpController);

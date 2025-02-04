@@ -189,4 +189,14 @@ const loginUser = catchAsync(async (req, res) => {
   res.status(httpStatus.OK).json({ message: 'Login successful', user, token });
 });
 
-export { verifyOtpController, googleLogin, test, verifyResetOtpController, resetUserPassword, forgotPassword, registerUser, loginUser, checkEmail };
+
+const updateUser = catchAsync(async (req, res) => {
+  const userId = req.user.id;
+  const updatedUser = await updateUserById(userId, req.body);
+  
+  res.status(httpStatus.OK).json({
+    message: 'Profile updated successfully',
+    user: updatedUser
+  });
+});
+export { verifyOtpController, googleLogin, test, updateUser, verifyResetOtpController, resetUserPassword, forgotPassword, registerUser, loginUser, checkEmail };

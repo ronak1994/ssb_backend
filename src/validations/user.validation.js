@@ -12,6 +12,17 @@ const googleLogin = {
   }),
 };
 
+const updateUser = {
+  body: Joi.object().keys({
+    name: Joi.string().trim().optional(),
+    username: Joi.string().alphanum().min(3).max(20).optional(),
+    height: Joi.number().integer().min(50).max(250).optional(),
+    weight: Joi.number().integer().min(20).max(300).optional(),
+    gender: Joi.string().valid('Male', 'Female', 'Other').optional(),
+    profilePicture: Joi.string().uri().optional(),
+    dailyGoals: Joi.number().integer().optional()
+  }),
+};
 
 
 const sendOtp = {
@@ -68,4 +79,4 @@ const login = {
   }),
 };
 
-export { sendOtp, verifyOtp, googleLogin, resetPassword, verifyResetOtp, checkEmail, register, login };
+export { sendOtp, verifyOtp, googleLogin, updateUser, resetPassword, verifyResetOtp, checkEmail, register, login };

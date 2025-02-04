@@ -88,6 +88,14 @@ const updateUserById = async (userId, updateBody) => {
   if (!user) {
     throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
   }
+   // Ensure unique username
+   if (updateBody.username && updateBody.username !== user.username) {
+    const existingUser = await User.findOne({ username: updateBody.username });
+    if (existingUser) {
+      throw new ApiError(httpStatus.BAD_REQUEST, 'Username is already taken');
+    }
+  }
+
   Object.assign(user, updateBody);
   await user.save();
   return user;
