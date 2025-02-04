@@ -15,6 +15,11 @@ const createUser = async (userBody) => {
   return user.toObject();
 };
 
+const getUserByReferredby = async(referralCode) =>{
+  let user = await User.findOne({ referralCode });
+  return user;
+}
+
 /**
  * Find or create a user by email
  */
@@ -126,4 +131,4 @@ const resetPassword = async (userId, newPassword) => {
 };
 
 
-export { createUser, findOrCreateUser, resetPassword, completeRegistration, getUserByEmail, getUserById, updateUserById };
+export { createUser, findOrCreateUser,  getUserByReferredby, resetPassword, completeRegistration, getUserByEmail, getUserById, updateUserById };

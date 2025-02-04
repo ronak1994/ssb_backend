@@ -17,6 +17,9 @@ router.post('/verify-otp', validate(userValidation.verifyOtp), userController.ve
 router.post('/register', validate(userValidation.register), userController.registerUser);
 router.post('/login', validate(userValidation.login), userController.loginUser);
 
+router.post('/test', userController.test);
+
+
 router.post('/google-login', validate(userValidation.googleLogin), userController.googleLogin);
 
 

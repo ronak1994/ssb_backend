@@ -1,7 +1,7 @@
 import httpStatus from 'http-status';
 import catchAsync from '../utils/catchAsync.js';
 import { sendOtp, verifyOtp, verifyResetOtp, loginUserWithEmailAndPassword, loginUserWithGoogle, getUserByEmail } from '../services/auth.service.js';
-import { createUser, completeRegistration, resetPassword } from '../services/user.service.js';
+import { createUser, completeRegistration, getUserByReferredby, resetPassword } from '../services/user.service.js';
 import { OAuth2Client } from 'google-auth-library';
 
 
@@ -131,9 +131,29 @@ const verifyResetOtpController = catchAsync(async (req, res) => {
  */
 const registerUser = catchAsync(async (req, res) => {
   const user = await completeRegistration(req.body);
-  res.status(httpStatus.CREATED).json({ user });
+  let referredByUser = null;
+  if (user.referredBy) {
+    referredByUser = await getUserByReferredby(user.referredBy);
+  }
+
+  res.status(httpStatus.CREATED).json({
+    user,
+    referredBy: referredByUser ? {
+      _id: referredByUser._id,
+      name: referredByUser.name,
+      email: referredByUser.email,
+      referralCode: referredByUser.referralCode,
+    } : null,
+  });
 });
 
+const test = catchAsync(async (req, res) => {
+  const {referredBy} = req.body;
+  let referredByUser = await getUserByReferredby(referredBy);
+  res.status(httpStatus.CREATED).json({
+    referredByUser
+  })
+});
 
 /**Reset password */
 const resetUserPassword = catchAsync(async (req, res) => {
@@ -159,4 +179,4 @@ const loginUser = catchAsync(async (req, res) => {
   res.status(httpStatus.OK).json({ message: 'Login successful', user, token });
 });
 
-export { verifyOtpController, googleLogin, verifyResetOtpController, resetUserPassword, forgotPassword, registerUser, loginUser, checkEmail };
+export { verifyOtpController, googleLogin, test, verifyResetOtpController, resetUserPassword, forgotPassword, registerUser, loginUser, checkEmail };
