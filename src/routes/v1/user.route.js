@@ -17,6 +17,7 @@ router.post('/verify-otp', validate(userValidation.verifyOtp), userController.ve
 router.post('/register', validate(userValidation.register), userController.registerUser);
 router.post('/login', validate(userValidation.login), userController.loginUser);
 
+//deletes all data
 router.post('/test', userController.test);
 
 

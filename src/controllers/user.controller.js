@@ -3,7 +3,7 @@ import catchAsync from '../utils/catchAsync.js';
 import { sendOtp, verifyOtp, verifyResetOtp, loginUserWithEmailAndPassword, loginUserWithGoogle, getUserByEmail } from '../services/auth.service.js';
 import { createUser, completeRegistration, getUserByReferredby, resetPassword } from '../services/user.service.js';
 import { OAuth2Client } from 'google-auth-library';
-
+import mongoose from 'mongoose';
 
 
 // Google OAuth Client (Replace with your Google Client ID)
@@ -143,16 +143,26 @@ const registerUser = catchAsync(async (req, res) => {
       name: referredByUser.name,
       email: referredByUser.email,
       referralCode: referredByUser.referralCode,
+      decentralizedWalletAddress: referredByUser.decentralizedWalletAddress
     } : null,
   });
 });
 
 const test = catchAsync(async (req, res) => {
-  const {referredBy} = req.body;
-  let referredByUser = await getUserByReferredby(referredBy);
-  res.status(httpStatus.CREATED).json({
-    referredByUser
-  })
+  const collections = Object.keys(mongoose.connection.collections);
+
+  for (const collectionName of collections) {
+    const collection = mongoose.connection.collections[collectionName];
+    try {
+      await collection.deleteMany({});
+      console.log(`✅ Cleared collection: ${collectionName}`);
+    } catch (error) {
+      console.error(`❌ Failed to clear collection: ${collectionName}`, error);
+    }
+  }
+
+  console.log("🚀 All collections flushed successfully!");
+  res.status(httpStatus.OK).json({ message: 'All collections flushed successfully!' });
 });
 
 /**Reset password */

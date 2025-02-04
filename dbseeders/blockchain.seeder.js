@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import { Blockchain, GlobalSupply, Phase } from '../src/models/blockchain.model.js';
+import Discount from '../src/models/discount.model.js';
 
 const blockchainData = [
   {
@@ -231,6 +232,72 @@ const phaseData = [
   { name: "E", totalSupply: 17468000, ssbtPrice: 0.09, isActive: false }
 ];
 
+const discountData = [
+  {
+    code: "WELCOME50",
+    amount: 50,
+    type: "percentage",
+    expiryDate: new Date("2025-12-31"),
+    usageLimit: 100,
+    usedCount: 0,
+    isActive: true
+  },
+  {
+    code: "FLAT100",
+    amount: 100,
+    type: "fixed",
+    expiryDate: new Date("2025-06-30"),
+    usageLimit: 50,
+    usedCount: 0,
+    isActive: true
+  },
+  {
+    code: "SUMMER20",
+    amount: 20,
+    type: "percentage",
+    expiryDate: new Date("2024-08-31"),
+    usageLimit: 200,
+    usedCount: 5,
+    isActive: true
+  },
+  {
+    code: "BLACKFRIDAY",
+    amount: 30,
+    type: "percentage",
+    expiryDate: new Date("2024-11-29"),
+    usageLimit: 500,
+    usedCount: 10,
+    isActive: true
+  },
+  {
+    code: "HOLIDAY150",
+    amount: 150,
+    type: "fixed",
+    expiryDate: new Date("2024-12-31"),
+    usageLimit: 300,
+    usedCount: 20,
+    isActive: true
+  },
+  {
+    code: "NEWYEAR25",
+    amount: 25,
+    type: "percentage",
+    expiryDate: new Date("2025-01-10"),
+    usageLimit: 150,
+    usedCount: 30,
+    isActive: true
+  },
+  {
+    code: "LOYAL500",
+    amount: 500,
+    type: "fixed",
+    expiryDate: new Date("2026-12-31"),
+    usageLimit: 1000,
+    usedCount: 100,
+    isActive: true
+  }
+];
+
 const seedDatabase = async () => {
   await mongoose.connect('mongodb://localhost:27017/ssb-db', {
     useNewUrlParser: true,
@@ -240,10 +307,12 @@ const seedDatabase = async () => {
   await Blockchain.deleteMany({});
   await GlobalSupply.deleteMany({});
   await Phase.deleteMany({});
+  await Discount.deleteMany(); // Clear existing data
 
   await Blockchain.insertMany(blockchainData);
   await GlobalSupply.insertMany(globalData);
   await Phase.insertMany(phaseData);
+  await Discount.insertMany(discountData);
 
   console.log('✅ Blockchain, Global Supply, and Phase data seeded successfully!');
   mongoose.connection.close();
