@@ -29,6 +29,31 @@ const blockchainSchema = new mongoose.Schema(
     phaseWiseBonuses: [phaseWiseBonusSchema],
     dailyMineCap: { type: Number, required: true },
     contractAddress: { type: String, required: true },
+    tokenUri: { type: String, required: false }, 
+    icon: { type: String, required: false },
+    gradient: { type: String, required: false },
+    styles: {
+      gradient: {
+        width: { type: String, required: false },
+        height: { type: String, required: false },
+        justifyContent: { type: String, default: "center" },
+        alignItems: { type: String, default: "center" },
+        alignSelf: { type: String, default: "center" },
+      },
+      title: {
+        color: { type: String, default: "#200745" },
+        fontSize: { type: Number, default: 18 },
+        textAlign: { type: String, default: "center" },
+        fontFamily: { type: String, default: "Lexend" },
+      },
+      price: {
+        color: { type: String, default: "#200745" },
+        fontSize: { type: Number, default: 24 },
+        marginTop: { type: Number, default: 4 },
+        textAlign: { type: String, default: "center" },
+        fontFamily: { type: String, default: "Lexend-Bold" },
+      },
+    },
     mainNftPrice: { type: Number, required: true },
     referPercentage: { type: Number, required: true }
   },

@@ -18,6 +18,33 @@ const blockchainData = [
     ],
     dailyMineCap: 2299,
     contractAddress: "0x123456789abcdef",
+    tokenUri:"https://teal-obvious-tahr-119.mypinata.cloud/ipfs/bafkreibjyr4bcacbnkrvqxgrvjl3yutyiaife3wv4udvfbxowamzwgng7u",
+    icon: "../../assets/icons/Green_Icon.png",
+    gradient: "../../assets/images/CardTopGreen.png",
+  
+    styles: {
+      gradient: {
+        width: "width * 0.73",
+        height: "height * 0.18",
+        justifyContent: "center",
+        alignItems: "center",
+        alignSelf: "center",
+        marginTop: 20,
+      },
+      title: {
+        color: "#fff",
+        fontSize: 18,
+        textAlign: "center",
+        fontFamily: "Lexend",
+      },
+      price: {
+        color: "#fff",
+        fontSize: 24,
+        marginTop: 4,
+        textAlign: "center",
+        fontFamily: "Lexend-Bold",
+      },
+    },
     mainNftPrice: 10000,
     referPercentage: 15
   },
@@ -37,6 +64,10 @@ const blockchainData = [
     ],
     dailyMineCap: 1919,
     contractAddress: "0x123456789abcdef",
+    icon: "../../assets/icons/Gold_Icon.png",
+    gradient: "../../assets/images/CardTopGold.png",
+    tokenUri:"https://teal-obvious-tahr-119.mypinata.cloud/ipfs/bafkreia5si2ltnjep6tuajiumy4xhb2uokxaffzpc4j6nw2sjgzizwwvoa",
+     
     mainNftPrice: 5000,
     referPercentage: 10
   },
@@ -56,6 +87,33 @@ const blockchainData = [
     ],
     dailyMineCap: 1534,
     contractAddress: "0x123456789abcdef",
+    icon: "../../assets/icons/Silver_Icon_Big.png",
+    gradient: "../../assets/images/CardTopSilver.png",
+    tokenUri:"https://teal-obvious-tahr-119.mypinata.cloud/ipfs/bafkreidy44jpxtbpp6bkarqg3fujfd5hvfbi3cn6t22uqc5cmk2bowabxu",
+     
+    styles: {
+      gradient: {
+        width: "width * 0.73",
+        height: "height * 0.18",
+        justifyContent: "center",
+        alignItems: "center",
+        alignSelf: "center",
+        marginTop: 20,
+      },
+      title: {
+        color: "#200745",
+        fontSize: 20,
+        textAlign: "center",
+        fontFamily: "Lexend-Bold",
+      },
+      price: {
+        color: "#200745",
+        fontSize: 26,
+        marginTop: 4,
+        textAlign: "center",
+        fontFamily: "Lexend-Bold",
+      },
+    },
     mainNftPrice: 1000,
     referPercentage: 8
   },
@@ -75,6 +133,32 @@ const blockchainData = [
     ],
     dailyMineCap: 1150,
     contractAddress: "0x123456789abcdef",
+    icon: "../../assets/icons/Black_Icon.png",
+    gradient: "../../assets/images/CardTopBlack.png",
+    tokenUri:"https://teal-obvious-tahr-119.mypinata.cloud/ipfs/bafkreigct22g3bgtrfgbyzzaqhjxqvmzzy7x3vqtzyx5w6bpnuawymcbmi",
+    styles: {
+      gradient: {
+        width: "width * 0.73",
+        height: "height * 0.18",
+        justifyContent: "center",
+        alignItems: "center",
+        alignSelf: "center",
+        marginTop: 20,
+      },
+      title: {
+        color: "#FFFFFF",
+        fontSize: 18,
+        textAlign: "center",
+        fontFamily: "Lexend",
+      },
+      price: {
+        color: "#FFFFFF",
+        fontSize: 24,
+        marginTop: 4,
+        textAlign: "center",
+        fontFamily: "Lexend-Bold",
+      },
+    },
     mainNftPrice: 500,
     referPercentage: 7
   },
@@ -94,8 +178,33 @@ const blockchainData = [
     ],
     dailyMineCap: 767,
     contractAddress: "0x123456789abcdef",
+    tokenUri: "https://teal-obvious-tahr-119.mypinata.cloud/ipfs/bafkreibjyr4bcacbnkrvqxgrvjl3yutyiaife3wv4udvfbxowamzwgng7u",
+    icon: "https://yourserver.com/assets/icons/White_Icon.png",
+    gradient: "https://yourserver.com/assets/images/CardTop.png",
     mainNftPrice: 100,
-    referPercentage: 7
+    referPercentage: 7,
+    styles: {
+      gradient: {
+        width: "width * 0.73",
+        height: "height * 0.18",
+        justifyContent: "center",
+        alignItems: "center",
+        alignSelf: "center",
+      },
+      title: {
+        color: "#200745",
+        fontSize: 18,
+        textAlign: "center",
+        fontFamily: "Lexend",
+      },
+      price: {
+        color: "#200745",
+        fontSize: 24,
+        marginTop: 4,
+        textAlign: "center",
+        fontFamily: "Lexend-Bold",
+      },
+    },
   }
 ];
 
