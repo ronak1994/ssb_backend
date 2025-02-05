@@ -57,6 +57,17 @@ const userSchema = new mongoose.Schema(
     registeredVia: { type: String, enum: ['email', 'google', 'facebook', 'metamask'], default: 'email' },
     loginVia: { type: String, enum: ['email', 'google', 'facebook', 'metamask'], default: 'email' },
     isTermAndConditionAccepted: { type: Boolean, default: true },
+
+    //blockchain info
+    blockchainId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Blockchain',
+      index: true,
+    },
+    completedBlocks: {
+      type: Number,
+      default: 0,
+    },
   },
   { timestamps: true }
 );

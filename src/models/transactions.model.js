@@ -26,10 +26,12 @@ const transactionSchema = new mongoose.Schema(
         'referral_bonus',
         'investor_bonus',
         'watch_bonus',
+        'phase_bonus',
         'daily_reward',
         'pool_A_reward',
         'pool_B_reward',
-        'purchase'
+        'purchase',
+        'deposite_against_purchase'
       ],
       required: true,
     },

@@ -6,7 +6,12 @@ const dailyStepSchema = new mongoose.Schema({
     required: true,
     default: Date.now, // Stores both date & exact time of step entry
   },
-  steps: {
+  walkingSteps: {
+    type: Number,
+    default: 0,
+    required: true,
+  },
+  rewardSteps: {
     type: Number,
     default: 0,
     required: true,
@@ -40,7 +45,11 @@ const userFitnessSchema = new mongoose.Schema(
       type: String, // Format: "YYYY-MM", 1 user, 1 month,1 entry. every month 1 new record will be inserted for each user
       required: true,
     },
-    dailySteps: {
+    dailyWalkingSteps: {
+      type: Number, // it will be summry of the day, overwritten at GMT-00 everyday
+      default: 0,
+    },
+    dailyRealSteps: {
       type: Number, // it will be summry of the day, overwritten at GMT-00 everyday
       default: 0,
     },

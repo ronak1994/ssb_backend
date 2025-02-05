@@ -21,4 +21,11 @@ const getBlockchainById = catchAsync(async (req, res) => {
   res.status(httpStatus.OK).json({ success: true, data: blockchain });
 });
 
-export { getAllBlockchains, getBlockchainById };
+
+const purchaseBlockchain = catchAsync(async (req, res) => {
+  const transaction = await savePurchaseTransaction(req.body);
+  res.status(httpStatus.CREATED).json({ message: 'Transaction recorded successfully', data: transaction });
+
+})
+
+export { getAllBlockchains, getBlockchainById, purchaseBlockchain };
