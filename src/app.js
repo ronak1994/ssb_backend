@@ -13,6 +13,7 @@ import { authLimiter } from './middlewares/rateLimiter.js';
 import routes from './routes/v1/index.js';
 import { errorConverter, errorHandler } from './middlewares/error.js';
 import ApiError from './utils/ApiError.js';
+import './services/cronJobs/index.js';
 
 const app = express();
 
@@ -63,7 +64,6 @@ app.use(errorConverter);
 
 // handle error
 app.use(errorHandler);
-
 
 
 export default app;

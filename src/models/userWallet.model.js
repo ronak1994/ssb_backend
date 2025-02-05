@@ -74,11 +74,6 @@ const walletSchema = new mongoose.Schema(
       ref: 'Blockchain', // Refers to the Blockchain schema
       default: null,
     },
-    userBlockchain: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'UserBlockchain', // Refers to user-specific blockchain ownership
-      default: null,
-    },
     lastUpdated: {
       type: Date,
       default: Date.now,

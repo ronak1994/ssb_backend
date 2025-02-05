@@ -2,7 +2,7 @@ import cron from 'node-cron';
 import UserFitness from '../../models/userFitness.mode.js';
 import Pool from '../../models/pools.model.js'
 import moment from 'moment-timezone';
-import logger from '../config/logger.js';
+import logger from '../../config/logger.js';
 
 
 /**
@@ -34,15 +34,17 @@ const resetDailyData = async () => {
 };
 
 // 🕒 Schedule job to run 2 minutes after GMT-00 (00:02 UTC)
-// cron.schedule('2 0 * * *', () => {
-//   logger.info('🕒 Running scheduled daily reset (GMT-00:02)...');
-//   resetDailyData();
-// }, {
-//   scheduled: true,
-//   timezone: "Etc/GMT"
-// });
+//cron.schedule('*/1 * * * *', () => { test for running the job every 2 mins
 
-import cron from 'node-cron';
+cron.schedule('2 0 * * *', () => {
+  logger.info('🕒 Running scheduled daily reset (GMT-00:02)...');
+  resetDailyData();
+}, {
+  scheduled: true,
+  timezone: "Etc/GMT"
+});
+
+
 
 
 

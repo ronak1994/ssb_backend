@@ -25,13 +25,27 @@ const savePoolEntry = async (userId, poolType, stepsRecorded) => {
   return { message: `${poolType} entry saved successfully.`, data: newPoolEntry };
 };
 
+
+
 /**
- * Calculate rewards based on pool type
+ * Fetches the list of eligible wallets for Pool A and Pool B.
+ * @returns {Object} { poolA: [wallets], poolB: [wallets] }
  */
-const calculateRewards = (poolType) => {
-  if (poolType === 'PoolA') return 50; // Example: 50 tokens for Pool A
-  if (poolType === 'PoolB') return 100; // Example: 100 tokens for Pool B
-  return 0;
+ const fetchPoolAWallets = async () => {
+  try {
+    const today = moment().format('YYYY-MM-DD'); // Get today's date
+
+    // Fetch users from Pool A for today
+    const poolAUsers = Pool.findOne();
+      
+    
+    return poolAUsers;
+  } catch (error) {
+    console.error('❌ Error fetching Pool A wallets:', error);
+    return [];
+  }
 };
 
-export { savePoolEntry };
+
+
+export { savePoolEntry, fetchPoolAWallets };
