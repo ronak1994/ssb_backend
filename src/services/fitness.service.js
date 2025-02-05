@@ -7,22 +7,24 @@ import moment from 'moment';
  */
 const getUserStepData = async (userId, date, monthYear) => {
   const currentMonth = monthYear || moment().format('YYYY-MM'); // Default to current month
+  const formattedDate = date ? moment(date, 'YYYY-MM-DD').format('DD/MM/YY') : null; // Ensure correct format
 
-  const userFitness = await UserFitness.findOne({ userId, monthYear: currentMonth });
+  // Find user fitness data for the given month
+  const userFitness = await UserFitness.findOne({ userId, monthYear: currentMonth }).lean(); 
 
   if (!userFitness) {
     return { message: 'No step data found for the given period' };
   }
 
-  if (date) {
-    // Return stepHistory for the specific date
+  if (formattedDate) {
+    // ✅ Return stepHistory for the specific date
     return {
-      date,
-      steps: userFitness.stepHistory[date] || [],
+      date: formattedDate,
+      steps: userFitness.stepHistory[formattedDate] || [],
     };
   }
 
-  // Return entire month's step data
+  // ✅ Return entire month's step data
   return {
     monthYear: currentMonth,
     dailyWalkingSteps: userFitness.dailyWalkingSteps,
@@ -35,41 +37,49 @@ const getUserStepData = async (userId, date, monthYear) => {
 /**
  * Update user's step count
  */
-const updateStepHistory = async (userId, walkingSteps, rewardSteps) => {
-  const currentDate = moment().format('DD/MM/YY'); // Get today's date
-  const currentMonth = moment().format('YYYY-MM'); // Get current month
+const updateStepHistory = async (walkingSteps, rewardSteps, source, userId) => {
+  const currentDate = moment().format('DD/MM/YY'); // Example: "05/02/24"
+  const currentMonth = moment().format('YYYY-MM'); // Example: "2025-02"
 
   let userFitness = await UserFitness.findOne({ userId, monthYear: currentMonth });
 
   if (!userFitness) {
-    // If no record for the current month, create a new one
+    // Create new monthly record if it doesn't exist
     userFitness = new UserFitness({
       userId,
       monthYear: currentMonth,
       dailyWalkingSteps: 0,
       dailyRealSteps: 0,
-      stepHistory: {},
+      stepHistory: {}, // Ensure stepHistory starts as an object
     });
   }
 
-  // Ensure stepHistory entry exists for today
-  if (!userFitness.stepHistory[currentDate]) {
-    userFitness.stepHistory[currentDate] = [];
+  // Ensure stepHistory is properly initialized
+  if (!userFitness.stepHistory) {
+    userFitness.stepHistory = {};
   }
 
-  // Append new step entry
-  userFitness.stepHistory[currentDate].push({
+  // Prepare step entry
+  const stepEntry = {
     timestamp: new Date(),
     walkingSteps,
     rewardSteps,
-  });
+  };
 
-  // Update daily summaries
-  userFitness.dailyWalkingSteps += walkingSteps;
-  userFitness.dailyRealSteps += rewardSteps;
-  userFitness.lastStepUpdate = new Date();
+  // Ensure the current date exists in stepHistory before pushing
+  await UserFitness.updateOne(
+    { userId, monthYear: currentMonth },
+    {
+      $set: { [`stepHistory.${currentDate}`]: userFitness.stepHistory[currentDate] || [] },
+      $push: { [`stepHistory.${currentDate}`]: stepEntry }, // Append step entry
+      $inc: { dailyWalkingSteps: walkingSteps, dailyRealSteps: rewardSteps }, // Increment daily steps
+      $set: { lastStepUpdate: new Date() },
+    },
+    { upsert: true }
+  );
 
-  await userFitness.save();
+  return { message: 'Steps updated successfully' };
 };
+
 
 export { updateStepHistory, getUserStepData };

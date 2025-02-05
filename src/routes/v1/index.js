@@ -6,6 +6,7 @@ import blockchainRoutes from './blockchain.route.js';
 import config from '../../config/config.js';
 import discountRoute from './discount.route.js';
 import fitnessRoute from './fitness.route.js';
+import pools from "./pools.route.js";
 
 const router = express.Router();
 
@@ -31,6 +32,7 @@ const devRoutes = [
 router.use('/blockchains', blockchainRoutes);
 router.use('/discounts', discountRoute);
 router.use('/fitness', fitnessRoute);
+router.use('/pools', pools);
 
 
 defaultRoutes.forEach((route) => {
