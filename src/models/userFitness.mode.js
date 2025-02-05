@@ -41,7 +41,7 @@ const userFitnessSchema = new mongoose.Schema(
       type: Number, // Summary of daily walking steps (reset at GMT-00 daily)
       default: 0,
     },
-    dailyRealSteps: {
+    dailyRewardSteps: {
       type: Number, // Summary of real steps tracked (reset at GMT-00 daily)
       default: 0,
     },

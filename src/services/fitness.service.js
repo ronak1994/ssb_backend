@@ -28,7 +28,7 @@ const getUserStepData = async (userId, date, monthYear) => {
   return {
     monthYear: currentMonth,
     dailyWalkingSteps: userFitness.dailyWalkingSteps,
-    dailyRealSteps: userFitness.dailyRealSteps,
+    dailyRewardSteps: userFitness.dailyRewardSteps,
     stepHistory: userFitness.stepHistory,
   };
 };
@@ -49,7 +49,7 @@ const updateStepHistory = async (walkingSteps, rewardSteps, source, userId) => {
       userId,
       monthYear: currentMonth,
       dailyWalkingSteps: 0,
-      dailyRealSteps: 0,
+      dailyRewardSteps: 0,
       stepHistory: {}, // Ensure stepHistory starts as an object
     });
   }
@@ -72,7 +72,7 @@ const updateStepHistory = async (walkingSteps, rewardSteps, source, userId) => {
     {
       $set: { [`stepHistory.${currentDate}`]: userFitness.stepHistory[currentDate] || [] },
       $push: { [`stepHistory.${currentDate}`]: stepEntry }, // Append step entry
-      $inc: { dailyWalkingSteps: walkingSteps, dailyRealSteps: rewardSteps }, // Increment daily steps
+      $inc: { dailyWalkingSteps: walkingSteps, dailyRewardSteps: rewardSteps }, // Increment daily steps
       $set: { lastStepUpdate: new Date() },
     },
     { upsert: true }

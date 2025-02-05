@@ -14,9 +14,10 @@ const saveDailyPoolA = catchAsync(async (req, res) => {
     return res.status(httpStatus.BAD_REQUEST).json({ message: 'User fitness data not found' });
   }
 
-  if (userFitness.dailyWalkingSteps >= 1500) {
+
+  if (userFitness.dailyRewardSteps >= 1500) {
     // If step condition is met, save Pool A entry
-    const response = await savePoolEntry(userId, 'PoolA', userFitness.dailyWalkingSteps);
+    const response = await savePoolEntry(userId, 'PoolA', userFitness.dailyRewardSteps);
     res.status(httpStatus.CREATED).json(response);
   } else {
     res.status(httpStatus.BAD_REQUEST).json({ message: 'Insufficient steps for Pool A' });
@@ -32,10 +33,10 @@ const saveDailyPoolB = catchAsync(async (req, res) => {
   if (!userFitness) {
     return res.status(httpStatus.BAD_REQUEST).json({ message: 'User fitness data not found' });
   }
-
-  if (userFitness.dailyWalkingSteps >= 10000) {
+  
+  if (userFitness.dailyRewardSteps >= 10000) {
     // If step condition is met, save Pool B entry
-    const response = await savePoolEntry(userId, 'PoolB', userFitness.dailyWalkingSteps);
+    const response = await savePoolEntry(userId, 'PoolB', userFitness.dailyRewardSteps);
     res.status(httpStatus.CREATED).json(response);
   } else {
     res.status(httpStatus.BAD_REQUEST).json({ message: 'Insufficient steps for Pool B' });
