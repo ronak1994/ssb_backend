@@ -1,10 +1,10 @@
 import mongoose from 'mongoose';
 
-const dailyStepSchema = new mongoose.Schema({
+const stepEntrySchema = new mongoose.Schema({
   timestamp: {
     type: Date,
     required: true,
-    default: Date.now, // Stores both date & exact time of step entry
+    default: Date.now, // Stores exact time of step entry
   },
   walkingSteps: {
     type: Number,
@@ -16,25 +16,17 @@ const dailyStepSchema = new mongoose.Schema({
     default: 0,
     required: true,
   },
-  poolAEligible: {
-    type: Boolean,
-    default: false,
-  },
-  poolBEligible: {
-    type: Boolean,
-    default: false,
-  },
 });
 
 const userFitnessSchema = new mongoose.Schema(
   {
     userFitnessId: {
-          type: mongoose.Schema.Types.ObjectId,
-          auto: true, // Automatically generates unique wallet ID
-          unique: true,
-          required: true,
-          index: true, // Allows fast lookups
-        },
+      type: mongoose.Schema.Types.ObjectId,
+      auto: true, // Automatically generates unique ID
+      unique: true,
+      required: true,
+      index: true,
+    },
     userId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
@@ -42,15 +34,15 @@ const userFitnessSchema = new mongoose.Schema(
       index: true,
     },
     monthYear: {
-      type: String, // Format: "YYYY-MM", 1 user, 1 month,1 entry. every month 1 new record will be inserted for each user
+      type: String, // Format: "YYYY-MM", ensuring one record per user per month
       required: true,
     },
     dailyWalkingSteps: {
-      type: Number, // it will be summry of the day, overwritten at GMT-00 everyday
+      type: Number, // Summary of daily walking steps (reset at GMT-00 daily)
       default: 0,
     },
     dailyRealSteps: {
-      type: Number, // it will be summry of the day, overwritten at GMT-00 everyday
+      type: Number, // Summary of real steps tracked (reset at GMT-00 daily)
       default: 0,
     },
     lastStepUpdate: {
@@ -62,11 +54,16 @@ const userFitnessSchema = new mongoose.Schema(
       enum: ['Google Fit', 'Apple HealthKit', 'Manual'],
       default: 'Manual',
     },
-    stepHistory: [dailyStepSchema], // Stores timestamped step history
+    stepHistory: {
+      type: Map,
+      of: [stepEntrySchema], // Each key is a **date (DD/MM/YY)** storing an array of step records
+      default: {},
+    },
   },
   { timestamps: true }
 );
 
+// Ensures one entry per user per month
 userFitnessSchema.index({ userId: 1, monthYear: 1 }, { unique: true });
 
 const UserFitness = mongoose.model('UserFitness', userFitnessSchema);

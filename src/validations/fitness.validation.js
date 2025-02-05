@@ -9,4 +9,12 @@ const updateSteps = {
   }),
 };
 
-export { updateSteps };
+const getSteps = {
+  query: Joi.object().keys({
+    date: Joi.string().regex(/^\d{2}\/\d{2}\/\d{2}$/).optional(),
+    monthYear: Joi.string().regex(/^\d{4}-\d{2}$/).optional(),
+    userId:Joi.string().optional()
+  }),
+};
+
+export { updateSteps, getSteps };
