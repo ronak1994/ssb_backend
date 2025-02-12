@@ -6,7 +6,7 @@ dotenv.config();
 
 const envVarsSchema = Joi.object()
   .keys({
-    NODE_ENV: Joi.string().valid('prod', 'development', 'test').required(),
+    NODE_ENV: Joi.string().valid('prod', 'development', 'test'),
     PORT: Joi.number().default(3000),
     MONGODB_URL: Joi.string().required().description('MongoDB URL'),
     JWT_SECRET: Joi.string().required().description('JWT secret key'),
