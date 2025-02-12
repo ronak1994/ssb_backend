@@ -2,12 +2,9 @@ import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import Web3 from 'web3';
 import cron from 'node-cron';
-//import User from "../../models/user.model.js"
+import Pool from "../../models/pools.model.js"
 import moment from 'moment';
-
 const PRIVATE_KEY = process.env.PRIVATE_KEY;
-
-
 
 // Ensure Private Key is Valid
 if (!PRIVATE_KEY || PRIVATE_KEY.length !== 64) {
@@ -870,12 +867,13 @@ const sendTransaction = async (tx) => {
     }
 };
 
-/**
- * Calls distribute50kDailyDistribution function on the contract in batches
- */
+
 const distribute50kDailyRewards = async () => {
     try {
-        const poolA = [];
+
+        const today = moment().format('YYYY-MM-DD');
+        const poolA = Pool.findOne({date:today});
+        console.log(poolA);
 
         if (poolA.length === 0 && poolB.length === 0) {
             console.log("No eligible users for Pool A or Pool B today.");
@@ -890,7 +888,7 @@ const distribute50kDailyRewards = async () => {
         // Process each batch separately
         for (const { batchA, batchB } of batches) {
             console.log(`Sending batch with Pool A: ${batchA.length}, Pool B: ${batchB.length} users...`);
-            await sendTransaction(contract.methods.distribute50kDailyDistribution(batchA, batchB));
+           // await sendTransaction(contract.methods.distribute50kDailyDistribution(batchA, batchB));
         }
 
     } catch (error) {

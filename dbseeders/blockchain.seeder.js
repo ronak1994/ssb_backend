@@ -4,9 +4,9 @@ import Discount from '../src/models/discount.model.js';
 
 const blockchainData = [
   {
-    name: "Green SSB",
+    name: "Green SS",
     nftTypes: [
-      { name: "main", blocks: 450 },
+      { name: "Fresh", blocks: 450 },
       { name: "mini", blocks: 150 },
       { name: "micro", blocks: 75 }
     ],
@@ -50,9 +50,9 @@ const blockchainData = [
     referPercentage: 15
   },
   {
-    name: "Gold SSB",
+    name: "Gold SS",
     nftTypes: [
-      { name: "main", blocks: 450 },
+      { name: "Fresh", blocks: 450 },
       { name: "mini", blocks: 150 },
       { name: "micro", blocks: 75 }
     ],
@@ -73,9 +73,9 @@ const blockchainData = [
     referPercentage: 10
   },
   {
-    name: "Silver SSB",
+    name: "Silver SS",
     nftTypes: [
-      { name: "main", blocks: 450 },
+      { name: "Fresh", blocks: 450 },
       { name: "mini", blocks: 150 },
       { name: "micro", blocks: 75 }
     ],
@@ -119,9 +119,9 @@ const blockchainData = [
     referPercentage: 8
   },
   {
-    name: "Black SSB",
+    name: "Black SS",
     nftTypes: [
-      { name: "main", blocks: 450 },
+      { name: "Fresh", blocks: 450 },
       { name: "mini", blocks: 150 },
       { name: "micro", blocks: 75 }
     ],
@@ -164,9 +164,9 @@ const blockchainData = [
     referPercentage: 7
   },
   {
-    name: "White SSB",
+    name: "White SS",
     nftTypes: [
-      { name: "main", blocks: 450 },
+      { name: "Fresh", blocks: 450 },
       { name: "mini", blocks: 150 },
       { name: "micro", blocks: 75 }
     ],
