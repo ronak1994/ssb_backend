@@ -25,7 +25,42 @@ const getBlockchainById = catchAsync(async (req, res) => {
 const purchaseBlockchain = catchAsync(async (req, res) => {
   const transaction = await savePurchaseTransaction(req.body);
   res.status(httpStatus.CREATED).json({ message: 'Transaction recorded successfully', data: transaction });
-
 })
 
-export { getAllBlockchains, getBlockchainById, purchaseBlockchain };
+
+/**
+ * Controller to handle fetching global supply data.
+ */
+const fetchGlobalSupply = catchAsync(async (req, res) => {
+  const globalSupply = await blockchainService.getGlobalSupplyData();
+  res.status(200).json({ success: true, data: globalSupply });
+});
+
+
+/**
+ * Controller to fetch all phases
+ */
+const getAllPhases = async (req, res) => {
+  try {
+    const phases = await blockchainService.fetchAllPhases();
+    res.status(200).json({ success: true, data: phases });
+  } catch (error) {
+    console.error("❌ Error fetching phases:", error);
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+/**
+ * Controller to fetch the active phase
+ */
+const getActivePhase = async (req, res) => {
+  try {
+    const activePhase = await blockchainService.fetchActivePhase();
+    res.status(200).json({ success: true, data: activePhase });
+  } catch (error) {
+    console.error("❌ Error fetching active phase:", error);
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+export { getAllBlockchains, getActivePhase, getAllPhases, fetchGlobalSupply, getBlockchainById, purchaseBlockchain };

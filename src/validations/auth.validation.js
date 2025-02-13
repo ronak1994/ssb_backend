@@ -10,6 +10,13 @@ const register = {
   }),
 };
 
+const walletByRefId = {
+  body: Joi.object().keys({
+    referredBy: Joi.string().required(),
+  }),
+};
+
+
 const login = {
   body: Joi.object().keys({
     email: Joi.string().required(),
@@ -50,5 +57,5 @@ const verifyEmail = {
   }),
 };
 
-export { register, login, logout, refreshTokens, forgotPassword, resetPassword, verifyEmail };
+export { register, login, walletByRefId, logout, refreshTokens, forgotPassword, resetPassword, verifyEmail };
 

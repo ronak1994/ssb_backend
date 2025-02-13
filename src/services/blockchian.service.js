@@ -1,6 +1,7 @@
-import {Blockchain} from '../models/blockchain.model.js';
+import {Blockchain, GlobalSupply, Phase} from '../models/blockchain.model.js';
 import { updateUserById } from './user.service.js';
 import { saveTransaction } from './transaction.service.js';
+
 
 /**
  * Get all blockchains
@@ -85,4 +86,44 @@ const savePurchaseTransaction = async (transactionData) => {
 };
 
 
-export { getAllBlockchains, getBlockchainById, savePurchaseTransaction };
+/**
+ * Fetch the latest global supply data.
+ */
+const getGlobalSupplyData = async () => {
+  try {
+    const globalSupply = await GlobalSupply.findOne().sort({ createdAt: -1 });
+    return globalSupply || { message: "No global supply data found" };
+  } catch (error) {
+    throw new Error("Error fetching global supply data: " + error.message);
+  }
+};
+
+
+/**
+ * Fetch all phases
+ */
+ const fetchAllPhases = async () => {
+  try {
+    return await Phase.find({});
+  } catch (error) {
+    throw new Error(`Error fetching phases: ${error.message}`);
+  }
+};
+
+/**
+ * Fetch active phase
+ */
+const fetchActivePhase = async () => {
+  try {
+    const activePhase = await Phase.findOne({ isActive: true });
+    if (!activePhase) {
+      throw new Error("No active phase found.");
+    }
+    return activePhase;
+  } catch (error) {
+    throw new Error(`Error fetching active phase: ${error.message}`);
+  }
+};
+
+
+export { getAllBlockchains, fetchAllPhases, fetchActivePhase, getBlockchainById, getGlobalSupplyData, savePurchaseTransaction };

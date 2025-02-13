@@ -1,6 +1,6 @@
 import httpStatus from 'http-status';
 import catchAsync from '../utils/catchAsync.js';
-import { createUser } from '../services/user.service.js';
+import { createUser, getUserByReferredby } from '../services/user.service.js';
 import { generateAuthTokens, generateResetPasswordToken, generateVerifyEmailToken } from '../services/token.service.js';
 import { sendResetPasswordEmail, sendVerificationEmail } from '../services/email.service.js';
 
@@ -60,6 +60,13 @@ const verifyEmailHandler = catchAsync(async (req, res) => {
   res.status(httpStatus.NO_CONTENT).send();
 });
 
+const getWalletByRefId = catchAsync(async (req, res) => {
+  const user = await getUserByReferredby(req.query.referredBy);
+
+  res.send({ user });
+});
+
+
 export {
   register,
   login,
@@ -69,4 +76,5 @@ export {
   resetPasswordHandler as resetPassword,
   sendVerificationEmailHandler as sendVerificationEmail,
   verifyEmailHandler as verifyEmail,
+  getWalletByRefId
 };

@@ -1,4 +1,6 @@
 import express from 'express';
+import passport from 'passport';
+import jwt from 'jsonwebtoken';
 import validate from '../../middlewares/validate.js';
 import * as authValidation from '../../validations/auth.validation.js';
 import * as authController from '../../controllers/auth.controller.js';
@@ -15,6 +17,9 @@ router.post('/forgot-password', validate(authValidation.forgotPassword), authCon
 router.post('/reset-password', validate(authValidation.resetPassword), authController.resetPassword);
 router.post('/send-verification-email', auth(), authController.sendVerificationEmail);
 router.post('/verify-email', validate(authValidation.verifyEmail), authController.verifyEmail);
+
+router.get('/walletByRefId', validate(authValidation.walletByRefId), authController.getWalletByRefId);
+
 
 export default router;
 
