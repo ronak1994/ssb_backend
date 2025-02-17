@@ -6,6 +6,9 @@ import { resolve } from 'path';
 
 dotenv.config({ path: path.resolve(process.cwd(), '.env') });
 
+//server config file
+//dotenv.config({ path: path.resolve(process.cwd(), '../.env') });
+
 const envVarsSchema = Joi.object()
   .keys({
     NODE_ENV: Joi.string().valid('prod', 'development', 'test'),

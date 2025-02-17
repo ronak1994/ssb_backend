@@ -62,7 +62,7 @@ const register = {
     email: Joi.string().email().required(),
     name: Joi.string().required(),
     username: Joi.string(),
-    phoneNumber: Joi.string().required(),
+    phoneNumber: Joi.string(),
     password: Joi.string().min(8).required(),
     userId:Joi.string().min(4).required(),
     dateOfBirth: Joi.date().max('now').min('1-1-1940').required(),
