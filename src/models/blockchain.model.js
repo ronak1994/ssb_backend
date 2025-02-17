@@ -55,7 +55,8 @@ const blockchainSchema = new mongoose.Schema(
       },
     },
     mainNftPrice: { type: Number, required: true },
-    referPercentage: { type: Number, required: true }
+    referPercentage: { type: Number, required: true },
+    nftAddress: { type: Number, required: true }
   },
   { timestamps: true, collection: 'blockchains' }
 );
