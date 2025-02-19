@@ -21,6 +21,10 @@ const purchaseSchema = new mongoose.Schema(
       required: true,
       index: true,
     },
+    nftAddress:{
+      type: String,
+      default: null,
+    },
     paymentDate: {
       type: Date,
       default: Date.now, // Stores the time of payment
@@ -72,7 +76,7 @@ const purchaseSchema = new mongoose.Schema(
       type: String,
       default: null, // Example: Stripe, PayPal, MetaMask
     },
-    transactionId: {
+    transactionHash: {
       type: String,
       unique: true,
       sparse: true, // Ensures uniqueness when present
