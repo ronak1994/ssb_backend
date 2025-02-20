@@ -23,7 +23,7 @@ const getBlockchainById = catchAsync(async (req, res) => {
 
 
 const purchaseBlockchain = catchAsync(async (req, res) => {
-  const transaction = await savePurchaseTransaction(req.body);
+  const transaction = await blockchainService.savePurchaseTransaction(req.body);
   res.status(httpStatus.CREATED).json({ message: 'Transaction recorded successfully', data: transaction });
 })
 

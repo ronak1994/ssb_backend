@@ -24,6 +24,14 @@ const updateUser = {
   }),
 };
 
+const updateUserWallet = {
+  body: Joi.object().keys({
+    decentralizedWalletAddress: Joi.string().required(),
+    userId: Joi.string().required(),
+  }),
+};
+
+
 
 const sendOtp = {
   body: Joi.object().keys({
@@ -79,4 +87,4 @@ const login = {
   }),
 };
 
-export { sendOtp, verifyOtp, googleLogin, updateUser, resetPassword, verifyResetOtp, checkEmail, register, login };
+export { sendOtp, verifyOtp, googleLogin, updateUserWallet, updateUser, resetPassword, verifyResetOtp, checkEmail, register, login };

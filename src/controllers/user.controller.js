@@ -65,11 +65,14 @@ const googleLogin = catchAsync(async (req, res) => {
  */
 const checkEmail = catchAsync(async (req, res) => {
   const { email } = req.body;
-  console.log(email);
   const user = await getUserByEmail(email);
-   console.log(user);
+   
   if (user) {
     let partial = (user.name && user.password ) ? false : true ;
+    if(partial){
+      await sendOtp(email);
+      res.status(httpStatus.OK).send({ exists: true, partial:partial, message: 'old user, with partial info, Redirecting to OTP verification.' });
+    }
     // If user exists, send them to login
     res.status(httpStatus.OK).send({ exists: true, partial:partial, message: 'User exists. Redirecting to login.' });
   } else {
@@ -199,4 +202,19 @@ const updateUser = catchAsync(async (req, res) => {
     user: updatedUser
   });
 });
-export { verifyOtpController, googleLogin, test, updateUser, verifyResetOtpController, resetUserPassword, forgotPassword, registerUser, loginUser, checkEmail };
+
+
+/***update user wallet */
+const updateUserWallet = catchAsync(async (req, res) => {
+  const userId = req.user.id;
+
+  const updated = await updateUserById(userId, req.body);
+  
+  res.status(httpStatus.OK).json({
+    message: 'Wallet updated successfully',
+    user: updatedUser
+  });
+});
+
+
+export { verifyOtpController, googleLogin, test, updateUserWallet, updateUser, verifyResetOtpController, resetUserPassword, forgotPassword, registerUser, loginUser, checkEmail };

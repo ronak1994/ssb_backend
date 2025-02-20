@@ -1,6 +1,7 @@
 import {Blockchain, GlobalSupply, Phase} from '../models/blockchain.model.js';
 import { updateUserById } from './user.service.js';
 import { saveTransaction } from './transaction.service.js';
+import User from '../models/user.model.js';
 
 
 /**
@@ -41,48 +42,9 @@ const savePurchaseTransaction = async (transactionData) => {
   // Step 2: Update User Profile with Purchased Blockchain
   await updateUserById(userId, { blockchainId: blockchainId });
 
-  //update transaction done in company wallet
-  await saveTransaction(
-    userId,
-    {transactionType:"deposite_against_purchase"},
-    {amount:""},
-    {currency:"SSBT"},
-    {transactionStatus:"completed"},
-    {transactionHash:""},
-    {senderWalletId:""},
-    {receiverWalletId:""}
-
-   );
-
-    //update Phase Bonus in buyer wallet
-    await saveTransaction(
-      userId,
-      {transactionType:"phase_bonus"},
-      {amount:""},
-      {currency:"SSBT"},
-      {transactionStatus:"completed"},
-      {transactionHash:""},
-      {senderWalletId:""},
-      {receiverWalletId:""}
   
-     );
-  
-     //update referal Bonus in referer wallet
-     await saveTransaction(
-      userId,
-      {transactionType:"referral_bonus"},
-      {amount:""},
-      {currency:"SSBT"},
-      {transactionStatus:"completed"},
-      {transactionHash:""},
-      {senderWalletId:""},
-      {receiverWalletId:""}
-  
-     );
-
-      //update user in 30 day investor bonus database
       
-  return transaction;
+  return User.findById(userId);
 };
 
 

@@ -9,7 +9,7 @@ const router = express.Router();
 
 
 /*********************/
-/***Mobile app Routes***/
+/*Mobile app Routes*/
 /*******************/
 
 router.post('/check-email', validate(userValidation.checkEmail), userController.checkEmail);
@@ -23,7 +23,10 @@ router.post('/test', userController.test);
 
 router.post('/google-login', validate(userValidation.googleLogin), userController.googleLogin);
 
-router.patch('/update-profile',auth(),validate(userValidation.updateUser),userController.updateUser);
+router.patch('/update-profile',validate(userValidation.updateUser),userController.updateUser);
+
+router.patch('/update-user-wallet',validate(userValidation.updateUserWallet),userController.updateUserWallet);
+
 
 router.post('/forgot-password', validate(userValidation.checkEmail), userController.forgotPassword);
 router.post('/verify-reset-otp', validate(userValidation.verifyResetOtp), userController.verifyResetOtpController);
