@@ -138,5 +138,8 @@ const resetPassword = async (userId, newPassword) => {
   }
 };
 
+ const getAllUsersService = async () => {
+  return await User.find({}, '-password'); // Excludes password field for security
+};
 
-export { createUser, findOrCreateUser,  getUserByReferredby, resetPassword, completeRegistration, getUserByEmail, getUserById, updateUserById };
+export { createUser, findOrCreateUser, getAllUsersService,  getUserByReferredby, resetPassword, completeRegistration, getUserByEmail, getUserById, updateUserById };

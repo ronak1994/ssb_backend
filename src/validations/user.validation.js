@@ -1,4 +1,5 @@
 import Joi from 'joi';
+import User from '../models/user.model.js';
 
 const checkEmail = {
   body: Joi.object().keys({
@@ -65,15 +66,43 @@ const resetPassword = {
 };
 
 
+// Function to calculate age
+const isAbove18 = (dob) => {
+  const birthDate = new Date(dob);
+  const today = new Date();
+  let age = today.getFullYear() - birthDate.getFullYear();
+  const monthDiff = today.getMonth() - birthDate.getMonth();
+  if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+      age--;
+  }
+  return age >= 18;
+};
+
 const register = {
   body: Joi.object().keys({
     email: Joi.string().email().required(),
     name: Joi.string().required(),
-    username: Joi.string(),
+    username: Joi.string()
+    .min(3)
+    .max(30)
+    .required()
+    .external(async (value) => {
+        // Check if username is already taken
+        const existingUser = await User.findOne({ username: value });
+        if (existingUser) {
+            throw new Joi.ValidationError('Username already taken');
+        }
+        return value;
+    }),
     phoneNumber: Joi.string(),
     password: Joi.string().min(8).required(),
     userId:Joi.string().min(4).required(),
-    dateOfBirth: Joi.date().max('now').min('1-1-1940').required(),
+    dateOfBirth: Joi.date().min('1-1-1940').required().custom((value, helpers) => {
+      if (!isAbove18(value)) {
+          return helpers.message('You must be at least 18 years old to register.');
+      }
+      return value;
+     }),
     referredBy:Joi.string().optional().allow(''),
     decentralizedWalletAddress: Joi.string().optional().allow('')
 

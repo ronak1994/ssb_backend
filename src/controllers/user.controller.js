@@ -1,8 +1,10 @@
 import httpStatus from 'http-status';
 import catchAsync from '../utils/catchAsync.js';
 import { sendOtp, verifyOtp, verifyResetOtp, loginUserWithEmailAndPassword, loginUserWithGoogle, getUserByEmail } from '../services/auth.service.js';
-import { createUser, completeRegistration, getUserByReferredby, resetPassword } from '../services/user.service.js';
+import { createUser, completeRegistration, getUserByReferredby, getAllUsersService, resetPassword } from '../services/user.service.js';
 import { OAuth2Client } from 'google-auth-library';
+
+
 import mongoose from 'mongoose';
 
 
@@ -133,6 +135,28 @@ const verifyResetOtpController = catchAsync(async (req, res) => {
  * Register a user
  */
 const registerUser = catchAsync(async (req, res) => {
+  
+  const { username, email, password, dateOfBirth } = req.body;
+
+  // **Check if username is unique**
+  const existingUser = await User.findOne({ username });
+  if (existingUser) {
+      throw new ApiError(httpStatus.BAD_REQUEST, 'Username already taken');
+  }
+
+  // **Check age validation**
+  const birthDate = new Date(dateOfBirth);
+  const today = new Date();
+  let age = today.getFullYear() - birthDate.getFullYear();
+  if (today.getMonth() < birthDate.getMonth() || 
+      (today.getMonth() === birthDate.getMonth() && today.getDate() < birthDate.getDate())) {
+      age--;
+  }
+
+  if (age < 18) {
+      throw new ApiError(httpStatus.BAD_REQUEST, 'You must be at least 18 years old to register.');
+  }
+
   const user = await completeRegistration(req.body);
   let referredByUser = null;
   if (user.referredBy) {
@@ -216,5 +240,10 @@ const updateUserWallet = catchAsync(async (req, res) => {
   });
 });
 
+ const getAllUsers = catchAsync(async (req, res) => {
+  const users = await getAllUsersService();
+  res.status(httpStatus.OK).json({ users });
+})
 
-export { verifyOtpController, googleLogin, test, updateUserWallet, updateUser, verifyResetOtpController, resetUserPassword, forgotPassword, registerUser, loginUser, checkEmail };
+
+export { verifyOtpController, getAllUsers, googleLogin, test, updateUserWallet, updateUser, verifyResetOtpController, resetUserPassword, forgotPassword, registerUser, loginUser, checkEmail };

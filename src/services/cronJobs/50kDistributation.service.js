@@ -832,7 +832,7 @@ const contractABI =
 // Web3 Setup
 const web3 = new Web3(new Web3.providers.HttpProvider("https://data-seed-prebsc-1-s1.binance.org:8545/"));
 
-const contractAddress = "0x41c941Acf958f7137DB5877dC84e2a9A53DB5B7d";
+const contractAddress = "0xa40c02AF413204B81718c8A982E00a85E1f21694";
 
 const formattedPrivateKey = `0x${PRIVATE_KEY}`; // Ensure correct prefix
 
