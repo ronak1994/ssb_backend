@@ -7,6 +7,12 @@ const checkEmail = {
   }),
 };
 
+const getFollowers = {
+  params: Joi.object().keys({
+    userId: Joi.string().required().length(24).message('Invalid User ID'),
+  }),
+};
+
 const googleLogin = {
   body: Joi.object().keys({
     token: Joi.string().required(),
@@ -116,4 +122,4 @@ const login = {
   }),
 };
 
-export { sendOtp, verifyOtp, googleLogin, updateUserWallet, updateUser, resetPassword, verifyResetOtp, checkEmail, register, login };
+export { sendOtp, verifyOtp, getFollowers, googleLogin, updateUserWallet, updateUser, resetPassword, verifyResetOtp, checkEmail, register, login };

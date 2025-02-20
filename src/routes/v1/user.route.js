@@ -23,10 +23,18 @@ router.get('/all-users', userController.getAllUsers);
 
 //deletes all data
 router.post('/test', userController.test);
+
 router.patch('/update-profile',validate(userValidation.updateUser),userController.updateUser);
 router.patch('/update-user-wallet',validate(userValidation.updateUserWallet),userController.updateUserWallet);
 router.post('/forgot-password',otpRateLimiter ,validate(userValidation.checkEmail), userController.forgotPassword);
 router.post('/verify-reset-otp', otpRateLimiter ,validate(userValidation.verifyResetOtp), userController.verifyResetOtpController);
 router.post('/reset-password', validate(userValidation.resetPassword), userController.resetUserPassword);
+
+/**
+ * @route GET /users/followers/:userId
+ * @desc Fetch users who signed up using the given user's referral code
+ * @access Public
+ */
+router.get('/followers/:userId', validate(userValidation.getFollowers), userController.getFollowers);
 
 export default router;

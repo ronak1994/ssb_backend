@@ -1,7 +1,7 @@
 import httpStatus from 'http-status';
 import catchAsync from '../utils/catchAsync.js';
 import { sendOtp, verifyOtp, verifyResetOtp, loginUserWithEmailAndPassword, loginUserWithGoogle, getUserByEmail } from '../services/auth.service.js';
-import { createUser, completeRegistration, getUserByReferredby, getAllUsersService, resetPassword, getUserByUsername, updateUserById } from '../services/user.service.js';
+import { createUser, completeRegistration, getFollowersService, getUserByReferredby, getAllUsersService, resetPassword, getUserByUsername, updateUserById } from '../services/user.service.js';
 import { OAuth2Client } from 'google-auth-library';
 
 
@@ -246,4 +246,14 @@ const updateUserWallet = catchAsync(async (req, res) => {
 })
 
 
-export { verifyOtpController, getAllUsers, googleLogin, test, updateUserWallet, updateUser, verifyResetOtpController, resetUserPassword, forgotPassword, registerUser, loginUser, checkEmail };
+/**
+ * Get all users referred by a specific user
+ */
+const getFollowers = catchAsync(async (req, res) => {
+  const { userId } = req.params;
+  const followers = await getFollowersService(userId);
+  res.status(httpStatus.OK).json({ success: true, data: followers });
+});
+
+
+export { verifyOtpController, getFollowers, getAllUsers, googleLogin, test, updateUserWallet, updateUser, verifyResetOtpController, resetUserPassword, forgotPassword, registerUser, loginUser, checkEmail };

@@ -14,24 +14,30 @@ const investorBonusSchema = new mongoose.Schema(
       required: true,
       index: true,
     },
-    dailyBonusAmount: {
-      type: mongoose.Schema.Types.Decimal128, // SSB token amount per day
-      required: true,
-    },
+    
     totalDays: {
       type: Number, // Total days the bonus is valid
-      required: true,
+      required: false,
       default: 30,
     },
     daysRemaining: {
       type: Number, // Days left for the bonus
-      required: true,
+      required: false,
       default: 30,
     },
     status: {
       type: String,
       enum: ['active', 'completed', 'expired'],
       default: 'active',
+    },
+    nftAddress: {
+      type: String,
+      required: true
+      
+    },
+    decentralizedWalletAddress:{
+      type: String,
+      required: true
     },
     lastProcessedDate: {
       type: Date,

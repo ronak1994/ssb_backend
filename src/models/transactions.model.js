@@ -41,17 +41,20 @@ const transactionSchema = new mongoose.Schema(
     },
     currency: {
       type: String,
-      enum: ['SSB', 'USDT', 'BUSD', 'USD'],
+      enum: ['SSBT', 'USDT', 'BUSD', 'USD'],
       required: true,
     },
     transactionStatus: {
       type: String,
       enum: ['pending', 'completed', 'failed'],
-      default: 'pending',
+      default: 'completed',
+    },
+    blockchainId: {
+      type: String,
+      default: null,
     },
     transactionHash: {
       type: String,
-      unique: true,
       sparse: true, // Only required for blockchain transactions
     },
     paymentId: {

@@ -5,6 +5,31 @@ import httpStatus from 'http-status';
 import crypto from 'crypto';
 import mongoose from 'mongoose';
 
+/**
+ * Fetch all users who were referred by the given user.
+ * @param {string} userId - The ID of the user whose referred users should be fetched.
+ * @returns {Array} List of referred users.
+ */
+const getFollowersService = async (userId) => {
+  try {
+    // Fetch the user's referral code
+    const user = await User.findById(userId);
+    if (!user || !user.referralCode) {
+      throw new Error('User not found or has no referral code');
+    }
+
+    // Find users who signed up using this referral code
+    const followers = await User.find({ referredBy: user.referralCode })
+      .select('name username email decentralizedWalletAddress createdAt')
+      .lean();
+
+    return followers;
+  } catch (error) {
+    console.error('❌ Error fetching followers:', error);
+    return [];
+  }
+};
+
 
 /**
  * Create a new user
@@ -147,4 +172,4 @@ const resetPassword = async (userId, newPassword) => {
   return await User.find({}, '-password'); // Excludes password field for security
 };
 
-export { createUser, findOrCreateUser, getUserByUsername, getAllUsersService,  getUserByReferredby, resetPassword, completeRegistration, getUserByEmail, getUserById, updateUserById };
+export { createUser, findOrCreateUser, getFollowersService, getUserByUsername, getAllUsersService,  getUserByReferredby, resetPassword, completeRegistration, getUserByEmail, getUserById, updateUserById };
