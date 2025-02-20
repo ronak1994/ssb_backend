@@ -69,7 +69,7 @@ const checkEmail = catchAsync(async (req, res) => {
    
   if (user) {
     let partial = (user.name && user.password ) ? false : true ;
-    if(!partial){
+    if(partial){
       await sendOtp(email);
       res.status(httpStatus.OK).send({ exists: true, partial:partial, message: 'old user, with partial info, Redirecting to OTP verification.' });
     }
