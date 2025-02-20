@@ -1,7 +1,7 @@
 import httpStatus from 'http-status';
 import catchAsync from '../utils/catchAsync.js';
 import { sendOtp, verifyOtp, verifyResetOtp, loginUserWithEmailAndPassword, loginUserWithGoogle, getUserByEmail } from '../services/auth.service.js';
-import { createUser, completeRegistration, getUserByReferredby, getAllUsersService, resetPassword } from '../services/user.service.js';
+import { createUser, completeRegistration, getUserByReferredby, getAllUsersService, resetPassword, getUserByUsername, updateUserById } from '../services/user.service.js';
 import { OAuth2Client } from 'google-auth-library';
 
 
@@ -139,7 +139,7 @@ const registerUser = catchAsync(async (req, res) => {
   const { username, email, password, dateOfBirth } = req.body;
 
   // **Check if username is unique**
-  const existingUser = await User.findOne({ username });
+  const existingUser = await getUserByUsername( req.body.username );
   if (existingUser) {
       throw new ApiError(httpStatus.BAD_REQUEST, 'Username already taken');
   }
@@ -230,13 +230,13 @@ const updateUser = catchAsync(async (req, res) => {
 
 /***update user wallet */
 const updateUserWallet = catchAsync(async (req, res) => {
-  const userId = req.user.id;
+  const userId = req.body.userId;
 
   const updated = await updateUserById(userId, req.body);
   
   res.status(httpStatus.OK).json({
     message: 'Wallet updated successfully',
-    user: updatedUser
+    user: updated
   });
 });
 

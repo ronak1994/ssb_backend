@@ -49,7 +49,7 @@ const userSchema = new mongoose.Schema(
     lastLogin: { type: Date, default: Date.now },
     dailyStreak: { type: Number, default: 0 },
     lastStreakUpdate: { type: Date, default: null },
-    decentralizedWalletAddress:{ type: String, trim: true, default: null },
+    decentralizedWalletAddress: { type: String, trim: true, default: null },
 
     // Referral & Registration
     referralCode: { type: String, unique: true, sparse: true },
@@ -58,16 +58,28 @@ const userSchema = new mongoose.Schema(
     loginVia: { type: String, enum: ['email', 'google', 'facebook', 'metamask'], default: 'email' },
     isTermAndConditionAccepted: { type: Boolean, default: true },
 
-    //blockchain info
-    blockchainId: {
+    // Blockchain-related fields
+    blockchainIds: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Blockchain',
+        index: true,
+      },
+    ], // Array to store multiple blockchains
+    activeBlockchainId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Blockchain',
+      default: null,
       index: true,
-    },
+    }, // Currently active blockchain
+
     completedBlocks: {
       type: Number,
       default: 0,
     },
+
+    // NFT details
+    nftAddress: { type: String, default: null, trim: true },
   },
   { timestamps: true }
 );
@@ -76,7 +88,7 @@ const userSchema = new mongoose.Schema(
 userSchema.index({ email: 1 });
 userSchema.index({ referralCode: 1 });
 userSchema.index({ userId: 1 }, { unique: true });
-
+userSchema.index({ activeBlockchainId: 1 });
 
 // Add plugins for JSON conversion and pagination
 userSchema.plugin(toJSON);

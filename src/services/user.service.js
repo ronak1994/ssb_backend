@@ -20,6 +20,11 @@ const getUserByReferredby = async(referralCode) =>{
   return user;
 }
 
+const getUserByUsername = async(username) =>{
+  let user = await User.findOne({ username });
+  return user;
+}
+
 /**
  * Find or create a user by email
  */
@@ -142,4 +147,4 @@ const resetPassword = async (userId, newPassword) => {
   return await User.find({}, '-password'); // Excludes password field for security
 };
 
-export { createUser, findOrCreateUser, getAllUsersService,  getUserByReferredby, resetPassword, completeRegistration, getUserByEmail, getUserById, updateUserById };
+export { createUser, findOrCreateUser, getUserByUsername, getAllUsersService,  getUserByReferredby, resetPassword, completeRegistration, getUserByEmail, getUserById, updateUserById };
