@@ -7,7 +7,7 @@ const purchase = {
       senderWalletId:Joi.string().required(),
       receiverWalletId:Joi.string().required(),
       transactionHash:Joi.string().required(),
-      amount:Joi.string().required(),
+      amount:Joi.number().required(),
       currency:Joi.string().required(),
       nftAddress:Joi.string().required(),
      

@@ -22,6 +22,7 @@ const googleLogin = {
 const updateUser = {
   body: Joi.object().keys({
     name: Joi.string().trim().optional(),
+    userId:Joi.string().trim().required(),
     username: Joi.string().alphanum().min(3).max(20).optional(),
     height: Joi.number().integer().min(50).max(250).optional(),
     weight: Joi.number().integer().min(20).max(300).optional(),

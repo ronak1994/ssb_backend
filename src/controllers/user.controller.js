@@ -218,7 +218,7 @@ const loginUser = catchAsync(async (req, res) => {
 
 
 const updateUser = catchAsync(async (req, res) => {
-  const userId = req.user.id;
+  const userId = req.body.userId;
   const updatedUser = await updateUserById(userId, req.body);
   
   res.status(httpStatus.OK).json({

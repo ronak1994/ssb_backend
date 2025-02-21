@@ -22,7 +22,7 @@ export const calculatePhaseBonus = async (blockchainId) => {
     }
 
    // Step 3: Find the corresponding phase bonus from the blockchain data
-     const phaseData = blockchain.phaseWiseBonuses.find(
+     const phaseData = await blockchain.phaseWiseBonuses.find(
        (phase) => phase.phaseName === activePhase.name
      );
 
@@ -67,13 +67,21 @@ const savePurchaseTransaction = async (transactionData) => {
     nftAddress
   } = transactionData;
 
+  console.log(blockchainId);
   // Step 1: Fetch Blockchain Data
-  const blockchain = await Blockchain.findById(blockchainId);
+  const blockchain = await Blockchain.findById(blockchainId).lean();
   if (!blockchain) {
     throw new Error('Invalid blockchainId');
   }
 
-   // Step 2: Fetch User Data
+  // **Ensure amount is a valid number**
+  const amount1 = Number(amount); 
+  if (isNaN(amount1)) {
+    throw new Error('Amount must be a valid number');
+  }
+
+   
+  // Step 2: Fetch User Data
    const user = await User.findById(userId);
    if (!user) {
      throw new Error('User not found');
@@ -92,18 +100,14 @@ const savePurchaseTransaction = async (transactionData) => {
       blockchainId,
       senderWalletId,
       receiverWalletId,
-      amount,
+      amount:amount1,
       currency,
       transactionHash
     });
       
   // Step 5: Save Investor Bonus Transaction (if applicable)
   
-  
- 
- 
-
-  
+  const phaseBonusAmount = await calculatePhaseBonus(blockchainId); // ✅ Await the async function
 
   await TransactionHistory.create({
     userId,
@@ -111,7 +115,7 @@ const savePurchaseTransaction = async (transactionData) => {
     blockchainId,
     senderWalletId:"company_wallet",
     receiverWalletId:senderWalletId,
-    amount:calculatePhaseBonus(blockchainId),
+    amount:phaseBonusAmount,
     currency:"SSBT",
     transactionHash
   });
