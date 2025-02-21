@@ -37,4 +37,8 @@ const getAllTransactions = async (filters = {}) => {
   return TransactionHistory.find(filters).sort({ timestamp: -1 });
 };
 
-export { saveTransaction, getTransactionsByUser, getTransactionById, getAllTransactions };
+const fetchTransactionsByUserAndType = async (userId, transactionType) => {
+  return await TransactionHistory.find({ userId, transactionType }).sort({ createdAt: -1 });
+};
+
+export default { saveTransaction, getTransactionsByUser, getTransactionById, getAllTransactions, fetchTransactionsByUserAndType };
