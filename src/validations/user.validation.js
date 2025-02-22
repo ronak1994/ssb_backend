@@ -19,6 +19,12 @@ const getFollowers = {
   }),
 };
 
+const getUser = {
+  params: Joi.object().keys({
+    userId: Joi.string().required().length(24).message('Invalid User ID'),
+  }),
+};
+
 const deleteAccount = {
   body: Joi.object().keys({
     userId: Joi.string().required().length(24).message('Invalid User ID'),
@@ -136,4 +142,4 @@ const login = {
   }),
 };
 
-export { sendOtp, verifyOtp, deleteAccount, checkUsername, getFollowers, googleLogin, updateUserWallet, updateUser, resetPassword, verifyResetOtp, checkEmail, register, login };
+export { sendOtp, verifyOtp, getUser,deleteAccount, checkUsername, getFollowers, googleLogin, updateUserWallet, updateUser, resetPassword, verifyResetOtp, checkEmail, register, login };

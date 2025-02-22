@@ -1,7 +1,7 @@
 import httpStatus from 'http-status';
 import catchAsync from '../utils/catchAsync.js';
 import { sendOtp, verifyOtp, verifyResetOtp, loginUserWithEmailAndPassword, loginUserWithGoogle, getUserByEmail } from '../services/auth.service.js';
-import { createUser, completeRegistration, deleteUser, getFollowersService, getUserByReferredby, getAllUsersService, resetPassword, getUserByUsername, updateUserById } from '../services/user.service.js';
+import { createUser, completeRegistration, deleteUser, getFollowersService, getUserByReferredby, getAllUsersService, resetPassword, getUserByUsername, updateUserById, getUserById } from '../services/user.service.js';
 import { OAuth2Client } from 'google-auth-library';
 
 
@@ -281,5 +281,14 @@ const getFollowers = catchAsync(async (req, res) => {
   res.status(httpStatus.OK).json({ success: true, data: followers });
 });
 
+const getUser = catchAsync(async (req, res) => {
+  const { userId } = req.params;
+  const user = await getUserById(userId);
+  if (user) {
+    res.status(httpStatus.OK).send({ exists: true, message: 'User exists', user });
+  } else {
+    res.status(httpStatus.OK).send({ exists: false, message: 'User does not exists'});
+  }
+})
 
-export { verifyOtpController, deleteAccount, checkUsername, getFollowers, getAllUsers, googleLogin, test, updateUserWallet, updateUser, verifyResetOtpController, resetUserPassword, forgotPassword, registerUser, loginUser, checkEmail };
+export { verifyOtpController, getUser, deleteAccount, checkUsername, getFollowers, getAllUsers, googleLogin, test, updateUserWallet, updateUser, verifyResetOtpController, resetUserPassword, forgotPassword, registerUser, loginUser, checkEmail };

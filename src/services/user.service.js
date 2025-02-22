@@ -154,7 +154,6 @@ const updateUserById = async (userId, updateBody) => {
 
 const resetPassword = async (userId, newPassword) => {
   try {
-    // Example userId
     console.log("📌 Raw userId:", userId, typeof userId);
     
     const isValid = mongoose.Types.ObjectId.isValid(String(userId));
@@ -174,17 +173,22 @@ const resetPassword = async (userId, newPassword) => {
       throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
     }
 
+    // Check if new password is the same as the old password
+    const isSamePassword = await bcrypt.compare(newPassword, user.password);
+    if (isSamePassword) {
+      throw new ApiError(httpStatus.BAD_REQUEST, 'New password must be different from the old password');
+    }
+
     // Hash the new password
     user.password = await bcrypt.hash(newPassword, 8);
 
     // Save the updated user record
     await user.save();
 
-    return user;
+    return { message: "Password updated successfully" };
 
   } catch (error) {
-    throw new ApiError(httpStatus.BAD_REQUEST, 'Invalid user ID format');
-    console.error("Error in resetPassword:", error.message);
+    console.error("❌ Error in resetPassword:", error.message);
     throw error;
   }
 };

@@ -22,6 +22,8 @@ router.post('/login', validate(userValidation.login), userController.loginUser);
 
 router.get('/all-users', userController.getAllUsers);
 
+router.get('/get-user/:userId',validate(userValidation.getUser) ,userController.getUser);
+
 
 //deletes all data
 router.post('/test', userController.test);
