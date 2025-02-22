@@ -103,6 +103,27 @@ const getUserByEmail = async (email) => {
   return await User.findOne({ email });
 };
 
+
+const deleteUser = async (userId) => {
+  try {
+    
+    // Find user
+    const user = await User.findById(userId);
+    if (!user) {
+        return 0;
+    }
+
+    // Finally, delete the user account
+    await User.findByIdAndDelete(userId);
+
+    return 1;
+
+  } catch (error) {
+        console.error("Error deleting user account:", error);
+        return 0;
+    }
+};
+
 /**
  * Get user by ID
  */
@@ -172,4 +193,4 @@ const resetPassword = async (userId, newPassword) => {
   return await User.find({}, '-password'); // Excludes password field for security
 };
 
-export { createUser, findOrCreateUser, getFollowersService, getUserByUsername, getAllUsersService,  getUserByReferredby, resetPassword, completeRegistration, getUserByEmail, getUserById, updateUserById };
+export { createUser, findOrCreateUser, deleteUser, getFollowersService, getUserByUsername, getAllUsersService,  getUserByReferredby, resetPassword, completeRegistration, getUserByEmail, getUserById, updateUserById };

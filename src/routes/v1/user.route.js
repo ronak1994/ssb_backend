@@ -30,6 +30,9 @@ router.post('/forgot-password',otpRateLimiter ,validate(userValidation.checkEmai
 router.post('/verify-reset-otp', otpRateLimiter ,validate(userValidation.verifyResetOtp), userController.verifyResetOtpController);
 router.post('/reset-password', validate(userValidation.resetPassword), userController.resetUserPassword);
 
+router.post('/delete-account', validate(userValidation.deleteAccount), userController.deleteAccount);
+
+
 /**
  * @route GET /users/followers/:userId
  * @desc Fetch users who signed up using the given user's referral code

@@ -1,7 +1,7 @@
 import httpStatus from 'http-status';
 import catchAsync from '../utils/catchAsync.js';
 import { sendOtp, verifyOtp, verifyResetOtp, loginUserWithEmailAndPassword, loginUserWithGoogle, getUserByEmail } from '../services/auth.service.js';
-import { createUser, completeRegistration, getFollowersService, getUserByReferredby, getAllUsersService, resetPassword, getUserByUsername, updateUserById } from '../services/user.service.js';
+import { createUser, completeRegistration, deleteUser, getFollowersService, getUserByReferredby, getAllUsersService, resetPassword, getUserByUsername, updateUserById } from '../services/user.service.js';
 import { OAuth2Client } from 'google-auth-library';
 
 
@@ -83,6 +83,8 @@ const checkEmail = catchAsync(async (req, res) => {
     res.status(httpStatus.OK).send({ exists: false, message: 'New user. Redirecting to OTP verification.' });
   }
 });
+
+
 
 
 /***Forgot password */
@@ -203,6 +205,20 @@ const resetUserPassword = catchAsync(async (req, res) => {
 });
 
 
+/**deleteAccount */
+const deleteAccount = catchAsync(async (req, res) => {
+  const {userId} = req.body;
+  const response = await deleteUser(userId);
+  
+  if(response){
+    res.status(200).json({ message: "User account and all related data deleted successfully" });
+  }else{
+    res.status(404).json({ message: "User not found" })
+  }
+  
+});
+
+
 /**
  * Login user
  */
@@ -256,4 +272,4 @@ const getFollowers = catchAsync(async (req, res) => {
 });
 
 
-export { verifyOtpController, getFollowers, getAllUsers, googleLogin, test, updateUserWallet, updateUser, verifyResetOtpController, resetUserPassword, forgotPassword, registerUser, loginUser, checkEmail };
+export { verifyOtpController, deleteAccount, getFollowers, getAllUsers, googleLogin, test, updateUserWallet, updateUser, verifyResetOtpController, resetUserPassword, forgotPassword, registerUser, loginUser, checkEmail };
