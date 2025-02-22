@@ -34,7 +34,7 @@ const userByRefferalCode = async (refferalCode) => {
   try {
     // Fetch the user's referral code
     const user = await User.findOne({"referralCode":refferalCode})
-    .select("decentralizedWalletAddress userId");
+    .select("decentralizedWalletAddress userId nftAddress");
     if (!user) {
       throw new Error('User not found or has no referral code');
     }
@@ -48,12 +48,12 @@ const userByRefferalCode = async (refferalCode) => {
       Gold: "0x7E3e103853E23F78cfCC43B3309cE2E6659C072A",
       Green: "0x400fBDE10146750d64bbA3DD5f1bE177F2822BB3",
     };
-    const nftCounts = {};
-    for (const [nftName, nftAddress] of Object.entries(nftAddresses)) {
-      const blockchainContract = new ethers.Contract(nftAddress, NFTABI, walletSigner);
-      const nftCount = await blockchainContract.getOwnerTokenIDs(walletAddress);
-      nftCounts[nftName] = nftCount.length ? nftCount.length : 0;
-    }
+    // const nftCounts = {};
+    // for (const [nftName, nftAddress] of Object.entries(nftAddresses)) {
+    //   const blockchainContract = new ethers.Contract(nftAddress, NFTABI, walletSigner);
+    //   const nftCount = await blockchainContract.getOwnerTokenIDs(walletAddress);
+    //   nftCounts[nftName] = nftCount.length ? nftCount.length : 0;
+    // }
 
 
     return user;

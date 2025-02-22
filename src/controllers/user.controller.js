@@ -287,6 +287,7 @@ const getFollowers = catchAsync(async (req, res) => {
 
 const getUserByRefferalCode = catchAsync(async (req, res) => {
   const { refferalCode } = req.params;
+  console.log(refferalCode);
   const user =  await userByRefferalCode(refferalCode);
 
   res.status(httpStatus.OK).json({ success: true, user });
