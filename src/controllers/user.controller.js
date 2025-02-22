@@ -5,7 +5,7 @@ import { sendOtp, verifyOtp, verifyResetOtp, loginUserWithEmailAndPassword, logi
 import { createUser, completeRegistration, deleteUser, 
   activateBlockchainService, getFollowersService, getUserByReferredby, 
   getAllUsersService, resetPassword, getUserByUsername, 
-  userByRefferalCode, updateUserById, getUserById } from '../services/user.service.js';
+  userByRefferalCode, updateUserById, getUserById, getUsersBlockchain } from '../services/user.service.js';
 import { OAuth2Client } from 'google-auth-library';
 
 
@@ -294,9 +294,10 @@ const getUserByRefferalCode = catchAsync(async (req, res) => {
 
 const getActiveBlockchain = catchAsync(async (req, res) => {
   const { userId } = req.params;
-  const user = await getUsersBlockchain(userId);
-  if (user) {
-    res.status(httpStatus.OK).send({ exists: true, message: 'User exists', user });
+
+  const activeBlockchainId = await getUsersBlockchain(userId);
+  if (activeBlockchainId) {
+    res.status(httpStatus.OK).send({ exists: true, message: 'User exists', activeBlockchainId });
   } else {
     res.status(httpStatus.OK).send({ exists: false, message: 'User does not exists'});
   }

@@ -64,7 +64,7 @@ const userByRefferalCode = async (refferalCode) => {
 }
 
 
-const getUserBlockchain = async (userId) => {
+const getUsersBlockchain = async (userId) => {
   try {
     // Fetch the user's referral code
     const user = await User.findById(userId);
@@ -76,7 +76,7 @@ const getUserBlockchain = async (userId) => {
     const activeBlockchainId = await User.findById(userId)
       .select('activeBlockchainId')
       .lean();
-
+     
     return activeBlockchainId;
   } catch (error) {
     console.error('❌ Error fetching followers:', error);
@@ -262,4 +262,4 @@ const resetPassword = async (userId, newPassword) => {
   return await User.find({}, '-password'); // Excludes password field for security
 };
 
-export { createUser, findOrCreateUser, userByRefferalCode, activateBlockchainService, getUserBlockchain, deleteUser, getFollowersService, getUserByUsername, getAllUsersService,  getUserByReferredby, resetPassword, completeRegistration, getUserByEmail, getUserById, updateUserById };
+export { createUser, findOrCreateUser, userByRefferalCode, activateBlockchainService, getUsersBlockchain, deleteUser, getFollowersService, getUserByUsername, getAllUsersService,  getUserByReferredby, resetPassword, completeRegistration, getUserByEmail, getUserById, updateUserById };
