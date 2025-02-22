@@ -1,6 +1,6 @@
 import cron from 'node-cron';
 import UserFitness from '../../models/userFitness.mode.js';
-import Pool from '../../models/pools.model.js'
+import DailyReward from '../../models/dailyrewards.model.js';
 import moment from 'moment-timezone';
 import logger from '../../config/logger.js';
 
@@ -14,7 +14,7 @@ const resetDailyData = async () => {
     logger.info('⏳ Resetting daily steps and clearing pools data...');
 
     // ✅ Step 1: Clear PoolA and PoolB data
-    await Pool.deleteMany({});
+    await DailyReward.deleteMany({});
     
     logger.info('✅ Cleared PoolA and PoolB data');
 

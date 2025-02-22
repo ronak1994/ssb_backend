@@ -40,7 +40,21 @@ const userByRefferalCode = async (refferalCode) => {
     }
 
     //find NFT address of highest paid NFT
-    
+    const userWallet = user.decentralizedWalletAddress;
+    const nftAddresses = {
+      White: "0xAa84dd899F0831A956210b7016cC3817Ab537B1a",
+      Black: "0x7f70F3737f856a07bD428dfc1038957F976F1562",
+      Silver: "0x3DaD996bC84ABcB22dbbB2a9e2a2Bf994eA8B93c",
+      Gold: "0x7E3e103853E23F78cfCC43B3309cE2E6659C072A",
+      Green: "0x400fBDE10146750d64bbA3DD5f1bE177F2822BB3",
+    };
+    const nftCounts = {};
+    for (const [nftName, nftAddress] of Object.entries(nftAddresses)) {
+      const blockchainContract = new ethers.Contract(nftAddress, NFTABI, walletSigner);
+      const nftCount = await blockchainContract.getOwnerTokenIDs(walletAddress);
+      nftCounts[nftName] = nftCount.length ? nftCount.length : 0;
+    }
+
 
     return user;
   } catch (error) {
@@ -193,6 +207,7 @@ const updateUserById = async (userId, updateBody) => {
 
 
 const activateBlockchainService = async (userId, blockchainId) => {
+  console.log(userId);
   const user = await User.findById(userId);
   if (!user) {
     throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
