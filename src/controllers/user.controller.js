@@ -86,6 +86,16 @@ const checkEmail = catchAsync(async (req, res) => {
 
 
 
+const checkUsername = catchAsync(async (req, res) => {
+  const { username } = req.body;
+  const user = await getUserByUsername(username);
+   
+  if (user) {
+    res.status(httpStatus.OK).send({ exists: true, message: 'User exists' });
+  } else {
+    res.status(httpStatus.OK).send({ exists: false, message: 'User does not exists'});
+  }
+});
 
 /***Forgot password */
 const forgotPassword = catchAsync(async (req, res) => {
@@ -272,4 +282,4 @@ const getFollowers = catchAsync(async (req, res) => {
 });
 
 
-export { verifyOtpController, deleteAccount, getFollowers, getAllUsers, googleLogin, test, updateUserWallet, updateUser, verifyResetOtpController, resetUserPassword, forgotPassword, registerUser, loginUser, checkEmail };
+export { verifyOtpController, deleteAccount, checkUsername, getFollowers, getAllUsers, googleLogin, test, updateUserWallet, updateUser, verifyResetOtpController, resetUserPassword, forgotPassword, registerUser, loginUser, checkEmail };
