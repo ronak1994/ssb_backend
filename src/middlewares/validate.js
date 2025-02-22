@@ -17,7 +17,16 @@ const validate = (schema) => async (req, res, next) => {
     Object.assign(req, value);
     return next();
   } catch (error) {
-    const errorMessage = error.details.map((details) => details.message).join(', ');
+    let errorMessage;
+
+    // If error is from express-validator, extract error messages
+    if (error && typeof error.array === "function") {
+      errorMessage = error.array().map(err => err.msg);
+    } else {
+      // Otherwise, use error.message (for unexpected errors)
+      errorMessage = error.message || "An unknown error occurred";
+    }
+  
     return next(new ApiError(httpStatus.BAD_REQUEST, errorMessage));
   }
 };

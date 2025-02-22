@@ -14,7 +14,6 @@ const saveDailyPoolA = catchAsync(async (req, res) => {
     return res.status(httpStatus.BAD_REQUEST).json({ message: 'User fitness data not found' });
   }
 
-
   if (userFitness.dailyRewardSteps >= 1500) {
     // If step condition is met, save Pool A entry
     const response = await savePoolEntry(userId, 'PoolA', userFitness.dailyRewardSteps);

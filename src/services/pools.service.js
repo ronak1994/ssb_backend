@@ -1,5 +1,6 @@
 import Pool from '../models/pools.model.js';
 import moment from 'moment';
+import User from "../models/user.model.js";
 
 /**
  * Save Pool Entry for a User
@@ -13,13 +14,24 @@ const savePoolEntry = async (userId, poolType, stepsRecorded) => {
     return { message: `User has already entered ${poolType} for today.` };
   }
 
+  //update mined block
+  const updatedUser = await User.findByIdAndUpdate(
+    userId,
+    { $inc: { completedBlocks: 1 } }, // Increment by 1
+    { new: true } // Return updated document
+  );
+
+  if (!updatedUser) {
+    throw new Error("User not found");
+  }
+
   // Save the pool entry
   const newPoolEntry = await Pool.create({
     userId,
     poolType,
     date: today,
-    stepsRecorded,
-    rewardTokens: calculateRewards(poolType),
+    stepsRecorded
+   
   });
 
   return { message: `${poolType} entry saved successfully.`, data: newPoolEntry };

@@ -7,6 +7,12 @@ const checkEmail = {
   }),
 };
 
+const refCode = {
+  params: Joi.object().keys({
+    refferalCode: Joi.string().required(),
+  }),
+};
+
 const checkUsername = {
   body: Joi.object().keys({
     username: Joi.string().required(),

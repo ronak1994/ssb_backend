@@ -83,6 +83,9 @@ const phaseSchema = new mongoose.Schema({
   isActive: { type: Boolean, default: false }
 });
 
+
+//Schema for watches 
+
 const Blockchain = mongoose.model('Blockchain', blockchainSchema);
 const GlobalSupply = mongoose.model('GlobalSupply', globalSupplySchema);
 const Phase = mongoose.model('Phase', phaseSchema);

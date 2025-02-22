@@ -30,6 +30,26 @@ const getFollowersService = async (userId) => {
   }
 };
 
+const userByRefferalCode = async (refferalCode) => {
+  try {
+    // Fetch the user's referral code
+    const user = await User.findOne({"referralCode":refferalCode})
+    .select("decentralizedWalletAddress userId");
+    if (!user) {
+      throw new Error('User not found or has no referral code');
+    }
+
+    //find NFT address of highest paid NFT
+    
+
+    return user;
+  } catch (error) {
+    console.error('❌ Error fetching followers:', error);
+    return [];
+  }
+}
+
+
 const getUserBlockchain = async (userId) => {
   try {
     // Fetch the user's referral code
@@ -227,4 +247,4 @@ const resetPassword = async (userId, newPassword) => {
   return await User.find({}, '-password'); // Excludes password field for security
 };
 
-export { createUser, findOrCreateUser, activateBlockchainService, getUserBlockchain, deleteUser, getFollowersService, getUserByUsername, getAllUsersService,  getUserByReferredby, resetPassword, completeRegistration, getUserByEmail, getUserById, updateUserById };
+export { createUser, findOrCreateUser, userByRefferalCode, activateBlockchainService, getUserBlockchain, deleteUser, getFollowersService, getUserByUsername, getAllUsersService,  getUserByReferredby, resetPassword, completeRegistration, getUserByEmail, getUserById, updateUserById };

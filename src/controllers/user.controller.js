@@ -1,7 +1,11 @@
 import httpStatus from 'http-status';
 import catchAsync from '../utils/catchAsync.js';
 import { sendOtp, verifyOtp, verifyResetOtp, loginUserWithEmailAndPassword, loginUserWithGoogle, getUserByEmail } from '../services/auth.service.js';
-import { createUser, completeRegistration, deleteUser, activateBlockchainService, getFollowersService, getUserByReferredby, getAllUsersService, resetPassword, getUserByUsername, getUserBlockchain, updateUserById, getUserById } from '../services/user.service.js';
+
+import { createUser, completeRegistration, deleteUser, 
+  activateBlockchainService, getFollowersService, getUserByReferredby, 
+  getAllUsersService, resetPassword, getUserByUsername, 
+  userByRefferalCode, updateUserById, getUserById } from '../services/user.service.js';
 import { OAuth2Client } from 'google-auth-library';
 
 
@@ -281,6 +285,13 @@ const getFollowers = catchAsync(async (req, res) => {
   res.status(httpStatus.OK).json({ success: true, data: followers });
 });
 
+const getUserByRefferalCode = catchAsync(async (req, res) => {
+  const { refferalCode } = req.params;
+  const user =  await userByRefferalCode(refferalCode);
+
+  res.status(httpStatus.OK).json({ success: true, user });
+})
+
 const getActiveBlockchain = catchAsync(async (req, res) => {
   const { userId } = req.params;
   const user = await getUsersBlockchain(userId);
@@ -310,4 +321,4 @@ const activateBlockchain= catchAsync(async (req, res) => {
   }
 })
 
-export { verifyOtpController, activateBlockchain, getActiveBlockchain, getUser, deleteAccount, checkUsername, getFollowers, getAllUsers, googleLogin, test, updateUserWallet, updateUser, verifyResetOtpController, resetUserPassword, forgotPassword, registerUser, loginUser, checkEmail };
+export { verifyOtpController, activateBlockchain, getUserByRefferalCode, getActiveBlockchain, getUser, deleteAccount, checkUsername, getFollowers, getAllUsers, googleLogin, test, updateUserWallet, updateUser, verifyResetOtpController, resetUserPassword, forgotPassword, registerUser, loginUser, checkEmail };

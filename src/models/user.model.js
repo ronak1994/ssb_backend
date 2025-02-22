@@ -79,7 +79,7 @@ const userSchema = new mongoose.Schema(
       default: 0,
     },
 
-    // NFT details
+    // NFT details of active blockchain
     nftAddress: { type: String, default: null, trim: true },
   },
   { timestamps: true }

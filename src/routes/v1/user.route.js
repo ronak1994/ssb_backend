@@ -49,6 +49,7 @@ router.post('/delete-account', validate(userValidation.deleteAccount), userContr
  */
 router.get('/followers/:userId', validate(userValidation.getFollowers), userController.getFollowers);
 
-//
+//get user by refferal code
+router.get('/user-by-refferal-code/:refferalCode', validate(userValidation.refCode), userController.getUserByRefferalCode);
 
 export default router;

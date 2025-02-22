@@ -6,7 +6,7 @@ const otpEmailTemplate = (otp) => {
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-  <title>SSB OTP Verification</title>
+  <title>StepStamp OTP Verification</title>
 
   <link
     href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap"
@@ -98,7 +98,7 @@ const otpEmailTemplate = (otp) => {
             to complete the procedure to change your email address. OTP is
             valid for
             <span style="font-weight: 600; color: #1f1f1f;">5 minutes</span>.
-            Do not share this code with others, including SSB
+            Do not share this code with others, including StepStamp
             employees.
           </p>
           
@@ -107,6 +107,7 @@ const otpEmailTemplate = (otp) => {
               margin: 0;
               margin-top: 60px;
               display: flex;
+               text-align: center;
               justify-content: center;
               align-items: center;
               gap: 10px;
@@ -117,28 +118,14 @@ const otpEmailTemplate = (otp) => {
               style="
                 font-size: 36px;
                 font-weight: 600;
-                letter-spacing: 15px;
+                letter-spacing: 10px;
                 color: #ba3d4f;
+                display: inline-block;
               "
             >
               ${otp}
             </span>
-            <button
-              onclick="copyOTP()"
-              style="
-                background: none;
-                border: none;
-                cursor: pointer;
-                padding: 5px;
-              "
-              title="Copy OTP"
-            >
-              <img 
-                src="https://cdn-icons-png.flaticon.com/512/724/724928.png" 
-                width="24px" 
-                alt="Copy OTP"
-              />
-            </button>
+            
           </div>
 
         </div>
@@ -232,16 +219,7 @@ const otpEmailTemplate = (otp) => {
     </footer>
   </div>
 
-  <script>
-    function copyOTP() {
-      const otpText = document.getElementById("otp-code").innerText;
-      navigator.clipboard.writeText(otpText).then(() => {
-        alert("OTP copied to clipboard!");
-      }).catch(err => {
-        console.error("Error copying OTP: ", err);
-      });
-    }
-  </script>
+ 
 </body>
 </html>
   `;

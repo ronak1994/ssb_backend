@@ -53,6 +53,14 @@ const transactionSchema = new mongoose.Schema(
       type: String,
       default: null,
     },
+    tokenId:{
+      type: String,
+      default: null,
+    },
+    watchGiven:{
+      type:Boolean,
+      default:false
+    },
     transactionHash: {
       type: String,
       sparse: true, // Only required for blockchain transactions
