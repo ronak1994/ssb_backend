@@ -46,6 +46,7 @@ const userSchema = new mongoose.Schema(
     isEmailVerified: { type: Boolean, default: false },
     isPhoneVerified: { type: Boolean, default: false },
     isActive: { type: Boolean, default: true },
+    watchOwner: { type: Boolean, default: false },
     lastLogin: { type: Date, default: Date.now },
     dailyStreak: { type: Number, default: 0 },
     lastStreakUpdate: { type: Date, default: null },

@@ -58,6 +58,14 @@ const updateUserWallet = {
   }),
 };
 
+const activateBlockchain = {
+  body: Joi.object().keys({
+    blockchainId: Joi.string().required(),
+    userId: Joi.string().required(),
+  }),
+};
+
+
 
 
 const sendOtp = {
@@ -142,4 +150,7 @@ const login = {
   }),
 };
 
-export { sendOtp, verifyOtp, getUser,deleteAccount, checkUsername, getFollowers, googleLogin, updateUserWallet, updateUser, resetPassword, verifyResetOtp, checkEmail, register, login };
+export { sendOtp, verifyOtp, 
+  getUser,deleteAccount, checkUsername, 
+  getFollowers, googleLogin, updateUserWallet, updateUser, resetPassword, 
+  verifyResetOtp, checkEmail, register, login, activateBlockchain };

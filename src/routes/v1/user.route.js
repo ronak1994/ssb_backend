@@ -24,6 +24,10 @@ router.get('/all-users', userController.getAllUsers);
 
 router.get('/get-user/:userId',validate(userValidation.getUser) ,userController.getUser);
 
+router.get('/active-blockchain/:userId',validate(userValidation.getUser) ,userController.getActiveBlockchain);
+
+router.post('/activate-blockchain',validate(userValidation.activateBlockchain) ,userController.activateBlockchain);
+
 
 //deletes all data
 router.post('/test', userController.test);
@@ -32,6 +36,7 @@ router.patch('/update-profile',validate(userValidation.updateUser),userControlle
 router.patch('/update-user-wallet',validate(userValidation.updateUserWallet),userController.updateUserWallet);
 router.post('/forgot-password',otpRateLimiter ,validate(userValidation.checkEmail), userController.forgotPassword);
 router.post('/verify-reset-otp', otpRateLimiter ,validate(userValidation.verifyResetOtp), userController.verifyResetOtpController);
+
 router.post('/reset-password', validate(userValidation.resetPassword), userController.resetUserPassword);
 
 router.post('/delete-account', validate(userValidation.deleteAccount), userController.deleteAccount);
@@ -43,5 +48,7 @@ router.post('/delete-account', validate(userValidation.deleteAccount), userContr
  * @access Public
  */
 router.get('/followers/:userId', validate(userValidation.getFollowers), userController.getFollowers);
+
+//
 
 export default router;

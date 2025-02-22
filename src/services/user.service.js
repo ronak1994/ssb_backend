@@ -30,6 +30,25 @@ const getFollowersService = async (userId) => {
   }
 };
 
+const getUserBlockchain = async (userId) => {
+  try {
+    // Fetch the user's referral code
+    const user = await User.findById(userId);
+    if (!user || !user.referralCode) {
+      throw new Error('User not found or has no referral code');
+    }
+
+    // Find users who signed up using this referral code
+    const activeBlockchainId = await User.findById(userId)
+      .select('activeBlockchainId')
+      .lean();
+
+    return activeBlockchainId;
+  } catch (error) {
+    console.error('❌ Error fetching followers:', error);
+    return [];
+  }
+};
 
 /**
  * Create a new user
@@ -152,6 +171,17 @@ const updateUserById = async (userId, updateBody) => {
   return user;
 };
 
+
+const activateBlockchainService = async (userId, blockchainId) => {
+  const user = await User.findById(userId);
+  if (!user) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
+  }
+  Object.assign(user, {"activeBlockchainId":blockchainId});
+  await user.save();
+  return user;
+}
+
 const resetPassword = async (userId, newPassword) => {
   try {
     console.log("📌 Raw userId:", userId, typeof userId);
@@ -197,4 +227,4 @@ const resetPassword = async (userId, newPassword) => {
   return await User.find({}, '-password'); // Excludes password field for security
 };
 
-export { createUser, findOrCreateUser, deleteUser, getFollowersService, getUserByUsername, getAllUsersService,  getUserByReferredby, resetPassword, completeRegistration, getUserByEmail, getUserById, updateUserById };
+export { createUser, findOrCreateUser, activateBlockchainService, getUserBlockchain, deleteUser, getFollowersService, getUserByUsername, getAllUsersService,  getUserByReferredby, resetPassword, completeRegistration, getUserByEmail, getUserById, updateUserById };
