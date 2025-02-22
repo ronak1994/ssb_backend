@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 import { Blockchain, GlobalSupply, Phase } from '../src/models/blockchain.model.js';
 import Discount from '../src/models/discount.model.js';
+import { Faq } from '../src/models/info.model.js';
 
 const blockchainData = [
   {
@@ -303,6 +304,67 @@ const discountData = [
   }
 ];
 
+const faqData = [
+  {
+    "category": "Steps Tracking",
+    "questions": [
+      { "question": "What is “Proof of movement”?", "answer": "Proof of Movement (PoM) is an innovative concept that leverages blockchain technology to incentivize physical movement. One Proof of Movement equals 1 Step taken by the user." },
+      { "question": "Do I get any tokens for indoor workouts like treadmill running etc?", "answer": "No. Indoor workouts are reflected in your step count, but they don’t qualify as 'Normalized Steps' required to mint the SSB token. Tokens are only rewarded for natural steps taken to go from point A to Point B." },
+      { "question": "How does the app track my steps?", "answer": "Our app uses the phone’s built-in sensors, such as the accelerometer and gyroscope, to detect movements that match a walking pattern. This data is then processed by our proprietary algorithm to provide an accurate step count." },
+      { "question": "Why does my step count increase when I shake the phone?", "answer": "Phone sensors detect all motion, and shaking can sometimes mimic the pattern of walking steps. However, our algorithm eliminates artificial movements and displays only the normalised step count on the app." },
+      { "question": "How can I get the most accurate step count?", "answer": "For the best accuracy, keep your phone in a stable position, like in a pocket or attached to your body. Avoid frequently moving it around or shaking it, as this can interfere with accurate step detection." },
+      { "question": "Can the app tell the difference between walking and other activities like cycling?", "answer": "Yes, the app uses activity recognition APIs that can detect different activities, including walking, running, and cycling. These APIs help filter out non-walking activities so the step count remains accurate." },
+      { "question": "Does the app work when it’s running in the background?", "answer": "Yes, our app can continue to count steps and track your activity even when it’s running in the background, provided you’ve granted the necessary permissions for background activity." },
+      { "question": "Why is there a discrepancy between my steps on this app and other fitness apps?", "answer": "Each app may use slightly different algorithms and settings for step counting. Differences in sensor sensitivity, activity filtering, and distance thresholds can lead to minor variations in step counts across apps." }
+    ]
+  },
+  {
+    "category": "StepsStamp FAQs (Principles-Based)",
+    "questions": [
+      { "question": "Why is StepsStamp’s ecosystem unique?", "answer": "StepsStamp uniquely combines Health (rewarding movement), Finance (decentralized ownership), and Technology (blockchain security) to create a fair, empowering platform where your daily effort translates into lasting value." },
+      { "question": "How does StepsStamp promote a healthy lifestyle?", "answer": "StepsStamp rewards you with crypto (SSBT) through Proof of Movement – your daily steps become 'health points' that unlock earnings. Move more, earn more!" },
+      { "question": "How does StepsStamp ensure financial fairness?", "answer": "Built on decentralized finance, StepsStamp cuts out middlemen. You own your rewards (SSBT) and control how you earn, stake, or spend them." }
+    ]
+  },
+  {
+    "category": "StepsStamp Blockchain (NFT)",
+    "questions": [
+      { "question": "What is a StepsStamp Blockchain (NFT)?", "answer": "A StepsStamp Blockchain (NFT) is a unique digital asset that lets you mine SSBT by walking. Each Blockchain has 450 blocks, and activating a block requires 1,500 POM/day." },
+      { "question": "How does mining work with Blockchains?", "answer": "Only Blockchain owners can mine SSBT. Mining rewards are decentralized and fixed, with different daily rewards for different Blockchain tiers." }
+    ]
+  },
+  {
+    "category": "DSSB (Decentralized StepsStamp Bank)",
+    "questions": [
+      { "question": "What is DSSB?", "answer": "DSSB is a decentralized bank where you become a shareholder by staking SSBT tokens. Stakeholders earn daily rewards from a fixed pool of 5,173 SSBT/day for 120 years." },
+      { "question": "How does staking work?", "answer": "Daily staking rewards are distributed proportionally based on your stake. You can choose manual or auto staking to maximize your rewards." }
+    ]
+  },
+  {
+    "category": "Rewards",
+    "questions": [
+      { "question": "How do I earn referral rewards?", "answer": "Share your referral link. When someone buys any Blockchain (NFT) using your link, you earn SSBT tokens equal to a percentage of their purchase in BUSD, based on your Blockchain tier." },
+      { "question": "Are there limits to referral rewards?", "answer": "No! Refer as many friends as you want." },
+      { "question": "When do I receive referral rewards?", "answer": "Immediately after your referral purchases a Blockchain." }
+    ]
+  },
+  {
+    "category": "Payment",
+    "questions": [
+      { "question": "What payment methods are accepted?", "answer": "Only BUSD (Binance USD) is accepted for purchasing Blockchains." },
+      { "question": "How do I buy BUSD?", "answer": "Purchase BUSD on crypto exchanges like Binance, then transfer it to your wallet." }
+    ]
+  },
+  {
+    "category": "New Additions for Clarity",
+    "questions": [
+      { "question": "How are mining and staking different?", "answer": "Mining involves earning SSBT by walking and requires a StepsStamp Blockchain (NFT), whereas staking involves earning SSBT by locking tokens in DSSB without needing to walk." },
+      { "question": "Can I combine mining and staking rewards?", "answer": "Yes! Use mined SSBT to increase your staking pool and compound earnings." }
+    ]
+  }
+];
+
+
 const seedDatabase = async () => {
   await mongoose.connect('mongodb://localhost:27017/ssb-db', {
     useNewUrlParser: true,
@@ -318,6 +380,7 @@ const seedDatabase = async () => {
   await GlobalSupply.insertMany(globalData);
   await Phase.insertMany(phaseData);
   await Discount.insertMany(discountData);
+  await Faq.insertMany(faqData);
 
   console.log('✅ Blockchain, Global Supply, and Phase data seeded successfully!');
   mongoose.connection.close();

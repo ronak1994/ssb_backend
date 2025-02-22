@@ -7,6 +7,7 @@ import TransactionHistory from './transactions.model.js';
 import WalletTransactionMap from './walletTransactionMap.model.js';
 import UserFitness from './userFitness.model.js';
 import Purchase from './purchase.model.js';
+import { UserRating, Faq, Info, Notification }  from './info.model.js';
 
 export {
   Token,
@@ -18,4 +19,5 @@ export {
   WalletTransactionMap,
   UserFitness,
   Purchase,
+  UserRating, Faq, Info, Notification
 };
