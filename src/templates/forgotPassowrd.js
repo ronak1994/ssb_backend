@@ -95,7 +95,7 @@ const otpEmailTemplate = (otp) => {
             "
           >
             Thank you for choosing StepsStamp. Use the following OTP
-            to complete the Sign up. OTP is
+            to complete Reset Password. OTP is
             valid for
             <span style="font-weight: 600; color: #1f1f1f;">5 minutes</span>.
             Do not share this code with others, including StepsStamp

@@ -8,6 +8,7 @@ import httpStatus from 'http-status';
 import { verifyToken, generateAuthTokens } from './token.service.js'; 
 import { sendEmail } from './email.service.js'
 import otpEmailTemplate from '../templates/otpEmailTemplate.js';
+import forgotPassowrd from '../templates/forgotPassowrd.js'
 
 /**Get user by email */
 const getUserByEmail = async (email) => {
@@ -80,6 +81,20 @@ const sendOtp = async (email) => {
    // ✅ Use the built-in email service to send the OTP
    const subject = `${otp} OTP For StepsStamp Mobile App Login`;
    const htmlContent = otpEmailTemplate(otp);
+ 
+   await sendEmail(email, subject, htmlContent);
+ 
+   return { message: 'OTP sent successfully' };
+ 
+};
+
+
+const sendOtp2 = async (email) => {
+  const otp = Math.floor(100000 + Math.random() * 900000).toString(); // Generate 6-digit OTP
+  await Otp.create({ email, otp, expiresAt: Date.now() + 10 * 60 * 1000 }); // OTP valid for 10 mins
+   // ✅ Use the built-in email service to send the OTP
+   const subject = `${otp} OTP For StepsStamp Mobile App Password Reset`;
+   const htmlContent = forgotPassowrd(otp);
  
    await sendEmail(email, subject, htmlContent);
  
@@ -188,4 +203,4 @@ const verifyEmail = async (email) => {
 };
 
 // ✅ Ensure everything is correctly exported
-export { loginUserWithEmailAndPassword, loginUserWithGoogle, verifyResetOtp, getUserByEmail, sendOtp, verifyOtp, logout, refreshAuth, resetPassword, verifyEmail };
+export { loginUserWithEmailAndPassword, sendOtp2, loginUserWithGoogle, verifyResetOtp, getUserByEmail, sendOtp, verifyOtp, logout, refreshAuth, resetPassword, verifyEmail };

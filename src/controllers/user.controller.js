@@ -1,6 +1,6 @@
 import httpStatus from 'http-status';
 import catchAsync from '../utils/catchAsync.js';
-import { sendOtp, verifyOtp, verifyResetOtp, loginUserWithEmailAndPassword, loginUserWithGoogle, getUserByEmail } from '../services/auth.service.js';
+import { sendOtp,sendOtp2, verifyOtp, verifyResetOtp, loginUserWithEmailAndPassword, loginUserWithGoogle, getUserByEmail } from '../services/auth.service.js';
 
 import { createUser, completeRegistration, deleteUser, 
   activateBlockchainService, getFollowersService, getUserByReferredby, 
@@ -125,7 +125,7 @@ const forgotPassword = catchAsync(async (req, res) => {
   if (user) {
    
     // If user exists, send them to login
-    await sendOtp(email);
+    await sendOtp2(email);
     res.status(httpStatus.OK).send({ exists: true, message: 'User exists. OTP to reset pass sent to registered email.', data:user });
   } else {
     // If no email id, register first
