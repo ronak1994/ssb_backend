@@ -16,7 +16,7 @@ const router = express.Router();
 router.post('/check-email',otpRateLimiter,validate(userValidation.checkEmail), userController.checkEmail);
 router.post('/check-username',validate(userValidation.checkUsername), userController.checkUsername);
 
-router.post('/verify-otp',otpRateLimiter,validate(userValidation.verifyOtp), userController.verifyOtpController);
+router.post('/verify-otp',validate(userValidation.verifyOtp), userController.verifyOtpController);
 router.post('/register', validate(userValidation.register), userController.registerUser);
 router.post('/login', validate(userValidation.login), userController.loginUser);
 
