@@ -37,6 +37,41 @@ const savePoolEntry = async (userId, poolType, stepsRecorded) => {
   return { message: `${poolType} entry saved successfully.`, data: newPoolEntry };
 };
 
+/**
+ * Save daily reward Entry for a User
+ */
+
+const saveDailyreward = async (userId, poolType, stepsRecorded) => {
+  const today = moment().format('YYYY-MM-DD');
+
+  // Check if the user has already entered this pool today
+  const existingEntry = await Pool.findOne({ userId, poolType, date: today });
+  if (existingEntry) {
+    return { message: `User has already entered ${poolType} for today.` };
+  }
+
+  //update mined block
+  const updatedUser = await User.findByIdAndUpdate(
+    userId,
+    { $inc: { completedBlocks: 1 } }, // Increment by 1
+    { new: true } // Return updated document
+  );
+
+  if (!updatedUser) {
+    throw new Error("User not found");
+  }
+
+  // Save the pool entry
+  const newPoolEntry = await Pool.create({
+    userId,
+    poolType,
+    date: today,
+    stepsRecorded
+   
+  });
+
+  return { message: `${poolType} entry saved successfully.`, data: newPoolEntry };
+};
 
 
 /**

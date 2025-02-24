@@ -67,6 +67,7 @@ const updateUserWallet = {
 const activateBlockchain = {
   body: Joi.object().keys({
     blockchainId: Joi.string().required(),
+    nftAddress: Joi.string().required(),
     userId: Joi.string().required(),
   }),
 };

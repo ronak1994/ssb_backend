@@ -314,8 +314,8 @@ const getUser = catchAsync(async (req, res) => {
 })
 
 const activateBlockchain= catchAsync(async (req, res) => {
-  const { userId, blockchainId } = req.body;
-  const user = await activateBlockchainService(userId, blockchainId);
+  const { userId, blockchainId, nftAddress } = req.body;
+  const user = await activateBlockchainService(userId, blockchainId, nftAddress);
   if (user) {
     res.status(httpStatus.OK).send({ exists: true, message: 'User blockchain updated', user });
   } else {

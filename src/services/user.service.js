@@ -4,6 +4,25 @@ import ApiError from '../utils/ApiError.js';
 import httpStatus from 'http-status';
 import crypto from 'crypto';
 import mongoose from 'mongoose';
+import fs from 'fs';
+import path from 'path'; 
+import Web3 from 'web3';
+// Load ABI from the file (Ensure the file exists)
+const ABI = JSON.parse(fs.readFileSync(path.resolve(process.cwd(), 'contractABI.json'), 'utf-8'));
+// Define contract details
+const CONTRACT_ADDRESS = "0xa40c02AF413204B81718c8A982E00a85E1f21694"; // Replace with your contract address
+const WEB3_PROVIDER = "https://data-seed-prebsc-1-s1.binance.org:8545/"; // Use correct provider URL
+
+const nftAddresses = {
+  White: "0xAa84dd899F0831A956210b7016cC3817Ab537B1a",
+  Black: "0x7f70F3737f856a07bD428dfc1038957F976F1562",
+  Silver: "0x3DaD996bC84ABcB22dbbB2a9e2a2Bf994eA8B93c",
+  Gold: "0x7E3e103853E23F78cfCC43B3309cE2E6659C072A",
+  Green: "0x400fBDE10146750d64bbA3DD5f1bE177F2822BB3",
+};
+
+// Initialize Web3
+const web3 = new Web3(new Web3.providers.HttpProvider(WEB3_PROVIDER));
 
 /**
  * Fetch all users who were referred by the given user.
@@ -41,20 +60,16 @@ const userByRefferalCode = async (refferalCode) => {
 
     //find NFT address of highest paid NFT
     const userWallet = user.decentralizedWalletAddress;
-    const nftAddresses = {
-      White: "0xAa84dd899F0831A956210b7016cC3817Ab537B1a",
-      Black: "0x7f70F3737f856a07bD428dfc1038957F976F1562",
-      Silver: "0x3DaD996bC84ABcB22dbbB2a9e2a2Bf994eA8B93c",
-      Gold: "0x7E3e103853E23F78cfCC43B3309cE2E6659C072A",
-      Green: "0x400fBDE10146750d64bbA3DD5f1bE177F2822BB3",
-    };
+   
+
     // const nftCounts = {};
     // for (const [nftName, nftAddress] of Object.entries(nftAddresses)) {
-    //   const blockchainContract = new ethers.Contract(nftAddress, NFTABI, walletSigner);
-    //   const nftCount = await blockchainContract.getOwnerTokenIDs(walletAddress);
+    //   const blockchainContract = new web3.eth.Contract(nftAddress, ABI, userWallet);
+    //   const nftCount = await blockchainContract.getOwnerTokenIDs(userWallet);
     //   nftCounts[nftName] = nftCount.length ? nftCount.length : 0;
     // }
 
+   //console.log(nftCounts);
 
     return user;
   } catch (error) {
@@ -206,13 +221,13 @@ const updateUserById = async (userId, updateBody) => {
 };
 
 
-const activateBlockchainService = async (userId, blockchainId) => {
+const activateBlockchainService = async (userId, blockchainId, nftAddress) => {
   console.log(userId);
   const user = await User.findById(userId);
   if (!user) {
     throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
   }
-  Object.assign(user, {"activeBlockchainId":blockchainId});
+  Object.assign(user, {"activeBlockchainId":blockchainId, "nftAddress":nftAddress});
   await user.save();
   return user;
 }
