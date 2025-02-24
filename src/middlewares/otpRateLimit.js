@@ -18,7 +18,7 @@ export const otpRateLimiter = async (req, res, next) => {
 
     // Check request count in last 10 minutes
     const requestCount = await redis.get(`${OTP_LIMIT_KEY}:${ip}`);
-    if (requestCount && requestCount >= 3) {
+    if (requestCount && requestCount >= 5) {
       return res.status(429).json({ message: 'Maximum 3 OTP requests allowed in 10 minutes.' });
     }
 
