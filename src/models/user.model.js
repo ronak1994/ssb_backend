@@ -62,11 +62,20 @@ const userSchema = new mongoose.Schema(
     // Blockchain-related fields
     blockchainIds: [
       {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Blockchain',
-        index: true,
-      },
-    ], // Array to store multiple blockchains
+          blockchainId: {
+              type: mongoose.Schema.Types.ObjectId,
+              ref: 'Blockchain',
+              required: true,
+              index: true,
+          },
+          tokenId: {
+              type: String, // Store the token ID as a string (adjust if needed)
+              required: true,
+          },
+      }
+  ],
+// Array to store multiple blockchains
+  
     activeBlockchainId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Blockchain',

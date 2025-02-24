@@ -10,7 +10,10 @@ const purchase = {
       amount:Joi.number().required(),
       currency:Joi.string().required(),
       nftAddress:Joi.string().required(),
-     
+      tokenId:Joi.string().required(),
+      welcomeBonusAmount:Joi.string().required(),
+      referralBonusAmount:Joi.string().optional(),
+      referrerWalletId:Joi.string().optional().allow('')
     }),
   };
   
