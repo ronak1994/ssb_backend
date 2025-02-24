@@ -39,6 +39,10 @@ const investorBonusSchema = new mongoose.Schema(
       type: String,
       required: true
     },
+    tokenId:{
+      type: String,
+      required: true
+    },
     lastProcessedDate: {
       type: Date,
       default: null,

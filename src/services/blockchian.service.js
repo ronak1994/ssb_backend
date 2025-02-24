@@ -80,7 +80,8 @@ const savePurchaseTransaction = async (transactionData) => {
       tokenId,
       welcomeBonusAmount,
       referralBonusAmount,
-      referrerWalletId
+      referrerWalletId,
+      referrerUserId
   } = transactionData;
 
 
@@ -146,7 +147,29 @@ const savePurchaseTransaction = async (transactionData) => {
       transactionHash
   });
 
-  
+   // Step 7: Save Refferal Bonus Transaction (if applicable)
+   if(referrerUserId){
+    await TransactionHistory.create({
+      userId:referrerUserId,
+      transactionType: "referral_bonus",
+      blockchainId,
+      senderWalletId: "company_wallet",
+      receiverWalletId: referrerWalletId,
+      amount: referralBonusAmount,
+      currency: "SSBT",
+      transactionHash
+  });
+   }  
+   
+
+  // Step 7: Save 30 days bonus pool
+  await InvestorBonus.create({
+    userId,
+    blockchainId,
+    nftAddress,
+    decentralizedWalletAddress:senderWalletId,
+    tokenId
+  });
 
   return user;
 

@@ -13,7 +13,9 @@ const purchase = {
       tokenId:Joi.string().required(),
       welcomeBonusAmount:Joi.string().required(),
       referralBonusAmount:Joi.string().optional(),
-      referrerWalletId:Joi.string().optional().allow('')
+      referrerWalletId:Joi.string().optional().allow(''),
+      referrerUserId:Joi.string().optional().allow('')
+
     }),
   };
   
