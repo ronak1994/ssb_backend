@@ -51,7 +51,7 @@ const investorBonusSchema = new mongoose.Schema(
   { timestamps: true, collection: 'investor_bonuses' }
 );
 
-investorBonusSchema.index({ userId: 1, blockchainId: 1 }, { unique: true });
+
 
 const InvestorBonus = mongoose.model('InvestorBonus', investorBonusSchema);
 

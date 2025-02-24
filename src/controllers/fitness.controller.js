@@ -14,7 +14,7 @@ const updateSteps = catchAsync(async (req, res) => {
 
 const getSteps = catchAsync(async (req, res) => {
   // const userId = req.user.id; // Extract logged-in user ID
-  const { date, monthYear, userId } = req.query;
+  const { date, monthYear, userId } = req.body;
 
   const stepData = await getUserStepData(userId, date, monthYear);
 

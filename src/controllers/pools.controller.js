@@ -2,7 +2,8 @@ import httpStatus from 'http-status';
 import catchAsync from '../utils/catchAsync.js';
 import { savePoolEntry } from '../services/pools.service.js';
 import { getUserStepData } from '../services/fitness.service.js'; // Fetch steps from DB
-import DailyReward from '../models/dailyrewards.model.js';
+import { saveDailyReward } from '../services/poolreward.service.js';
+import { getUserWalletAndNft } from '../services/user.service.js';
 
 const saveDailyPoolA = catchAsync(async (req, res) => {
   //const userId = req.user.id;
@@ -18,7 +19,10 @@ const saveDailyPoolA = catchAsync(async (req, res) => {
   if (userFitness.dailyRewardSteps >= 1500) {
     // If step condition is met, save Pool A entry
     const response = await savePoolEntry(userId, 'PoolA', userFitness.dailyRewardSteps);
-    const rewardResponse = await saveDailyreward(userId, 'PoolA', userFitness.dailyRewardSteps);
+    
+    const {decentralizedWalletAddress, nftAddress} = await getUserWalletAndNft(userId);
+  
+    const rewardResponse = await saveDailyReward(userId, decentralizedWalletAddress, nftAddress, 'A');
 
     res.status(httpStatus.CREATED).json(response);
   } else {

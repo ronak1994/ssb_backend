@@ -8,4 +8,4 @@ const router = express.Router();
 router.post('/saveDailyPoolA', validate(poolsValidation.validatePoolA), poolsController.saveDailyPoolA);
 router.post('/saveDailyPoolB', validate(poolsValidation.validatePoolB), poolsController.saveDailyPoolB);
 
-export default router;
+export default router; 

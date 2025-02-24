@@ -7,6 +7,7 @@ import * as fitnessController from '../../controllers/fitness.controller.js';
 const router = express.Router();
 
 router.post('/updateSteps', validate(fitnessValidation.updateSteps), fitnessController.updateSteps);
-router.get('/getSteps', validate(fitnessValidation.getSteps), fitnessController.getSteps);
+router.post('/getSteps', validate(fitnessValidation.getSteps), fitnessController.getSteps);
+
 
 export default router;

@@ -218,6 +218,10 @@ const getUserById = async (userId) => {
   return await User.findById(userId);
 };
 
+const getUserWalletAndNft = async (userId) => {
+  return await User.findById(userId).select('decentralizedWalletAddress nftAddress');
+};
+
 /**
  * Update user by ID
  */
@@ -296,4 +300,5 @@ const resetPassword = async (userId, newPassword) => {
   return await User.find({}, '-password'); // Excludes password field for security
 };
 
-export { createUser, findOrCreateUser, userByRefferalCode, activateBlockchainService, getUsersBlockchain, deleteUser, getFollowersService, getUserByUsername, getAllUsersService,  getUserByReferredby, resetPassword, completeRegistration, getUserByEmail, getUserById, updateUserById };
+export { createUser,getUserWalletAndNft,
+   findOrCreateUser, userByRefferalCode, activateBlockchainService, getUsersBlockchain, deleteUser, getFollowersService, getUserByUsername, getAllUsersService,  getUserByReferredby, resetPassword, completeRegistration, getUserByEmail, getUserById, updateUserById };
