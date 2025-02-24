@@ -8,6 +8,7 @@ import { createUser, completeRegistration, deleteUser,
   userByRefferalCode, updateUserById, getUserById, getUsersBlockchain } from '../services/user.service.js';
 import { OAuth2Client } from 'google-auth-library';
 
+import { getUserWatches } from '../services/watch.service.js'
 
 import mongoose from 'mongoose';
 
@@ -100,6 +101,19 @@ const checkUsername = catchAsync(async (req, res) => {
     res.status(httpStatus.OK).send({ exists: false, message: 'User does not exists'});
   }
 });
+
+/**get watches by user id***/
+
+const getWatchesByUserId = catchAsync(async (req, res) => {
+  const { userId } = req.params;
+  const watches = await getUserWatches(userId);
+   
+  if (watches) {
+    res.status(httpStatus.OK).send({ exists: true, message: 'watches exists', watches });
+  } else {
+    res.status(httpStatus.OK).send({ exists: false, message: 'watches does not exists'});
+  }
+})
 
 /***Forgot password */
 const forgotPassword = catchAsync(async (req, res) => {
@@ -323,4 +337,5 @@ const activateBlockchain= catchAsync(async (req, res) => {
   }
 })
 
-export { verifyOtpController, activateBlockchain, getUserByRefferalCode, getActiveBlockchain, getUser, deleteAccount, checkUsername, getFollowers, getAllUsers, googleLogin, test, updateUserWallet, updateUser, verifyResetOtpController, resetUserPassword, forgotPassword, registerUser, loginUser, checkEmail };
+export { verifyOtpController, getWatchesByUserId,
+   activateBlockchain, getUserByRefferalCode, getActiveBlockchain, getUser, deleteAccount, checkUsername, getFollowers, getAllUsers, googleLogin, test, updateUserWallet, updateUser, verifyResetOtpController, resetUserPassword, forgotPassword, registerUser, loginUser, checkEmail };

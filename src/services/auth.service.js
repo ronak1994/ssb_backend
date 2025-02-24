@@ -78,7 +78,7 @@ const sendOtp = async (email) => {
   const otp = Math.floor(100000 + Math.random() * 900000).toString(); // Generate 6-digit OTP
   await Otp.create({ email, otp, expiresAt: Date.now() + 10 * 60 * 1000 }); // OTP valid for 10 mins
    // ✅ Use the built-in email service to send the OTP
-   const subject = `${otp} OTP For Step Stamp Mobile App Login`;
+   const subject = `${otp} OTP For StepsStamp Mobile App Login`;
    const htmlContent = otpEmailTemplate(otp);
  
    await sendEmail(email, subject, htmlContent);

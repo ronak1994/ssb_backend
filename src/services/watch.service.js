@@ -1,3 +1,4 @@
+import mongoose from 'mongoose';
 import User from '../models/user.model.js';
 import Watch from '../models/watch.model.js';
 
@@ -19,6 +20,33 @@ const nftAddresses = {
 // Function to determine watch type from NFT address
 const getWatchTypeFromAddress = (nftAddress) => {
     return Object.keys(nftAddresses).find(watchType => nftAddresses[watchType] === nftAddress) || null;
+};
+
+
+const getUserWatches = async (userId) => {
+
+    try {
+        // Validate if userId is a valid MongoDB ObjectId
+        if (!mongoose.Types.ObjectId.isValid(userId)) {
+            throw new Error('Invalid userId: Must be a valid MongoDB ObjectId');
+        }
+
+        // Fetch all watches belonging to the user
+        const watches = await Watch.find({ userId })
+            .select("watchType nftAddress tokenId purchaseDate")
+            .lean(); // Converts to plain JavaScript object for efficiency
+
+        if (!watches.length) {
+            console.log(`⚠️ No watches found for userId: ${userId}`);
+            return [];
+        }
+
+        console.log("✅ Watches fetched successfully:", watches);
+        return watches;
+    } catch (error) {
+        console.error("❌ Error fetching watches:", error.message);
+        throw error;
+    }
 };
 
  const saveWatchTransaction = async (userId, nftAddress, tokenId) => {
@@ -75,4 +103,6 @@ const getWatchTypeFromAddress = (nftAddress) => {
     }
 };
 
-export { saveWatchTransaction }
+
+
+export { saveWatchTransaction,getUserWatches }
