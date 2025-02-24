@@ -112,9 +112,9 @@ function splitBatches(poolA, poolB) {
 
 
 // ✅ Test if Cron Works
-//cron.schedule('59 23 * * *', async () => {
+cron.schedule('59 23 * * *', async () => {
 
-  cron.schedule("*/10 * * * * *",async () => {
+  //cron.schedule("*/10 * * * * *",async () => {
     console.log('🕒 Running scheduled job at GMT-00:00 - 1 minute (23:59 UTC)');
     await distribute50kDailyRewards();
   }, {
