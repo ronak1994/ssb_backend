@@ -24,10 +24,10 @@ export const otpRateLimiter = async (req, res, next) => {
 
     // Increase OTP request count
     await redis.incr(`${OTP_LIMIT_KEY}:${ip}`);
-    await redis.expire(`${OTP_LIMIT_KEY}:${ip}`, 10); // Expiry 10 minutes (600 sec)
+    await redis.expire(`${OTP_LIMIT_KEY}:${ip}`, 100); // Expiry 10 minutes (600 sec)
 
     // Set cooldown for 60 seconds
-    await redis.set(`${OTP_COOLDOWN_KEY}:${ip}`, '1', 'EX', 10);
+    await redis.set(`${OTP_COOLDOWN_KEY}:${ip}`, '1', 'EX', 100);
 
     next();
   } catch (error) {

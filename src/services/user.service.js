@@ -7,22 +7,6 @@ import mongoose from 'mongoose';
 import fs from 'fs';
 import path from 'path'; 
 import Web3 from 'web3';
-// Load ABI from the file (Ensure the file exists)
-const ABI = JSON.parse(fs.readFileSync(path.resolve(process.cwd(), 'contractABI.json'), 'utf-8'));
-// Define contract details
-const CONTRACT_ADDRESS = "0xa40c02AF413204B81718c8A982E00a85E1f21694"; // Replace with your contract address
-const WEB3_PROVIDER = "https://data-seed-prebsc-1-s1.binance.org:8545/"; // Use correct provider URL
-
-const nftAddresses = {
-  White: "0xAa84dd899F0831A956210b7016cC3817Ab537B1a",
-  Black: "0x7f70F3737f856a07bD428dfc1038957F976F1562",
-  Silver: "0x3DaD996bC84ABcB22dbbB2a9e2a2Bf994eA8B93c",
-  Gold: "0x7E3e103853E23F78cfCC43B3309cE2E6659C072A",
-  Green: "0x400fBDE10146750d64bbA3DD5f1bE177F2822BB3",
-};
-
-// Initialize Web3
-const web3 = new Web3(new Web3.providers.HttpProvider(WEB3_PROVIDER));
 
 /**
  * Fetch all users who were referred by the given user.
@@ -51,32 +35,67 @@ const getFollowersService = async (userId) => {
 
 const userByRefferalCode = async (refferalCode) => {
   try {
-    // Fetch the user's referral code
-    const user = await User.findOne({"referralCode":refferalCode})
-    .select("decentralizedWalletAddress userId nftAddress");
-    if (!user) {
-      throw new Error('User not found or has no referral code');
-    }
+      // Fetch the user's referral code
+      const user = await User.findOne({ "referralCode": refferalCode })
+          .select("decentralizedWalletAddress userId nftAddress");
+      if (!user) {
+          throw new Error('User not found or has no referral code');
+      }
 
-    //find NFT address of highest paid NFT
-    const userWallet = user.decentralizedWalletAddress;
-   
+      // Load ABI from file
+      const ABI = JSON.parse(fs.readFileSync(path.resolve(process.cwd(), 'NFTABI.json'), 'utf-8'));
 
-    // const nftCounts = {};
-    // for (const [nftName, nftAddress] of Object.entries(nftAddresses)) {
-    //   const blockchainContract = new web3.eth.Contract(nftAddress, ABI, userWallet);
-    //   const nftCount = await blockchainContract.getOwnerTokenIDs(userWallet);
-    //   nftCounts[nftName] = nftCount.length ? nftCount.length : 0;
-    // }
+      // Ensure ABI is an array
+      if (!Array.isArray(ABI)) {
+          throw new Error("❌ ABI is not an array! Check NFTABI.json format.");
+      }
 
-   //console.log(nftCounts);
+      // Define contract details
+      const WEB3_PROVIDER = "https://data-seed-prebsc-1-s1.binance.org:8545/"; // Use correct provider URL
+      const nftAddresses = {
+          Green: "0x400fBDE10146750d64bbA3DD5f1bE177F2822BB3",
+          Gold: "0x7E3e103853E23F78cfCC43B3309cE2E6659C072A",
+          Silver: "0x3DaD996bC84ABcB22dbbB2a9e2a2Bf994eA8B93c",
+          Black: "0x7f70F3737f856a07bD428dfc1038957F976F1562",
+          White: "0xAa84dd899F0831A956210b7016cC3817Ab537B1a",
+      };
 
-    return user;
+      // Initialize Web3
+      const web3 = new Web3(new Web3.providers.HttpProvider(WEB3_PROVIDER));
+
+      // Find NFT address of highest priority NFT
+      const userWallet = user.decentralizedWalletAddress;
+      const nftCounts = {};
+      let highestNftAddress = null;
+
+      for (const [nftName, nftAddress] of Object.entries(nftAddresses)) {
+          const blockchainContract = new web3.eth.Contract(ABI, nftAddress);
+          
+          try {
+              const nftCount = await blockchainContract.methods.getOwnerTokenIDs(userWallet).call();
+              nftCounts[nftName] = nftCount.length ? nftCount.length : 0;
+
+              // Assign NFT address if count is at least 1 and no higher-priority NFT has been set
+              if (nftCount.length > 0 && !highestNftAddress) {
+                  highestNftAddress = nftAddress;
+              }
+          } catch (error) {
+              console.error(`❌ Error fetching NFT count for ${nftName}:`, error.message);
+              nftCounts[nftName] = 0;
+          }
+      }
+
+      user.nftAddress = highestNftAddress;
+
+      return {
+          user
+      };
+
   } catch (error) {
-    console.error('❌ Error fetching followers:', error);
-    return [];
+      console.error('❌ Error fetching user by referral code:', error);
+      return { user: null, highestNftAddress: null };
   }
-}
+};
 
 
 const getUsersBlockchain = async (userId) => {
