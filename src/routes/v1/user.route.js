@@ -13,7 +13,7 @@ const router = express.Router();
 /*Mobile app Routes*/
 /*******************/
 
-router.post('/check-email',otpRateLimiter,validate(userValidation.checkEmail), userController.checkEmail);
+router.post('/check-email',validate(userValidation.checkEmail), userController.checkEmail);
 router.post('/check-username',validate(userValidation.checkUsername), userController.checkUsername);
 
 router.post('/verify-otp',validate(userValidation.verifyOtp), userController.verifyOtpController);
@@ -34,8 +34,8 @@ router.post('/test', userController.test);
 
 router.patch('/update-profile',validate(userValidation.updateUser),userController.updateUser);
 router.patch('/update-user-wallet',validate(userValidation.updateUserWallet),userController.updateUserWallet);
-router.post('/forgot-password',otpRateLimiter ,validate(userValidation.checkEmail), userController.forgotPassword);
-router.post('/verify-reset-otp', otpRateLimiter ,validate(userValidation.verifyResetOtp), userController.verifyResetOtpController);
+router.post('/forgot-password' ,validate(userValidation.checkEmail), userController.forgotPassword);
+router.post('/verify-reset-otp' ,validate(userValidation.verifyResetOtp), userController.verifyResetOtpController);
 
 router.post('/reset-password', validate(userValidation.resetPassword), userController.resetUserPassword);
 
