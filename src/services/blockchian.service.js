@@ -81,6 +81,7 @@ const savePurchaseTransaction = async (transactionData) => {
       welcomeBonusAmount,
       referralBonusAmount,
       referrerWalletId,
+      referrerNftAddress,
       referrerUserId
   } = transactionData;
 
@@ -148,6 +149,16 @@ const savePurchaseTransaction = async (transactionData) => {
   });
 
    // Step 7: Save Refferal Bonus Transaction (if applicable)
+   const refferalPercent ={
+    "0xAa84dd899F0831A956210b7016cC3817Ab537B1a": ".07",
+    "0x7f70F3737f856a07bD428dfc1038957F976F1562": ".07",
+    "0x3DaD996bC84ABcB22dbbB2a9e2a2Bf994eA8B93c": ".08",
+    "0x7E3e103853E23F78cfCC43B3309cE2E6659C072A": ".10",
+    "0x400fBDE10146750d64bbA3DD5f1bE177F2822BB3": ".15%"
+  };
+   const refPecent = refferalPercent[referrerNftAddress];
+   const referralBonusAmount1 = amount1 * refPecent ;
+
    if(referrerUserId){
     await TransactionHistory.create({
       userId:referrerUserId,
@@ -155,7 +166,7 @@ const savePurchaseTransaction = async (transactionData) => {
       blockchainId,
       senderWalletId: "company_wallet",
       receiverWalletId: referrerWalletId,
-      amount: referralBonusAmount,
+      amount: referralBonusAmount1,
       currency: "SSBT",
       transactionHash
   });

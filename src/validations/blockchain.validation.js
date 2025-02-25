@@ -14,8 +14,8 @@ const purchase = {
       welcomeBonusAmount:Joi.string().required(),
       referralBonusAmount:Joi.string().optional().allow(''),
       referrerWalletId:Joi.string().optional().allow(''),
-      referrerUserId:Joi.string().optional().allow('')
-
+      referrerUserId:Joi.string().optional().allow(''),
+      referrerNftAddress:Joi.string().optional().allow('')
     }),
   };
   

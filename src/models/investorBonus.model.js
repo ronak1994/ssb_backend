@@ -48,7 +48,7 @@ const investorBonusSchema = new mongoose.Schema(
       default: null,
     },
   },
-  { timestamps: true, collection: 'investor_bonuses' }
+  { timestamps: true, collection: 'InvestorBonus' }
 );
 
 
