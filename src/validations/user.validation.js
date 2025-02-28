@@ -157,7 +157,12 @@ const login = {
   }),
 };
 
-export { sendOtp, verifyOtp, 
+const getWatches = {
+  params: Joi.object().keys({
+    decentralizedWalletAddress: Joi.string().required(),
+  })
+}
+export { sendOtp, verifyOtp, getWatches,
   getUser,deleteAccount, checkUsername, 
   getFollowers, googleLogin, updateUserWallet, updateUser, resetPassword, 
   verifyResetOtp, checkEmail, register, login, activateBlockchain };

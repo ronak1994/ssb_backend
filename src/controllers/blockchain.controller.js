@@ -2,6 +2,7 @@ import httpStatus from 'http-status';
 import catchAsync from '../utils/catchAsync.js';
 import * as blockchainService from '../services/blockchian.service.js';
 
+
 /**
  * Get all blockchains
  */
@@ -24,6 +25,8 @@ const getBlockchainById = catchAsync(async (req, res) => {
 
 const purchaseBlockchain = catchAsync(async (req, res) => {
   const transaction = await blockchainService.savePurchaseTransaction(req.body);
+ 
+  console.log(watches);
   res.status(httpStatus.CREATED).json({ message: 'Transaction recorded successfully', data: transaction });
 })
 

@@ -14,44 +14,20 @@ const investorBonusSchema = new mongoose.Schema(
       required: true,
       index: true,
     },
-    
-    totalDays: {
-      type: Number, // Total days the bonus is valid
-      required: false,
-      default: 30,
-    },
-    daysRemaining: {
-      type: Number, // Days left for the bonus
-      required: false,
-      default: 30,
-    },
+    totalDays: { type: Number, default: 30 },
+    daysRemaining: { type: Number, default: 30 },
     status: {
       type: String,
       enum: ['active', 'completed', 'expired'],
       default: 'active',
     },
-    nftAddress: {
-      type: String,
-      required: true
-      
-    },
-    decentralizedWalletAddress:{
-      type: String,
-      required: true
-    },
-    tokenId:{
-      type: String,
-      required: true
-    },
-    lastProcessedDate: {
-      type: Date,
-      default: null,
-    },
+    nftAddress: { type: String, required: true },
+    decentralizedWalletAddress: { type: String, required: true },
+    tokenId: { type: String, required: true },
+    lastProcessedDate: { type: Date, default: null },
   },
-  { timestamps: true, collection: 'InvestorBonus' }
+  { timestamps: true, collection: 'investor_bonuses' }
 );
-
-
 
 const InvestorBonus = mongoose.model('InvestorBonus', investorBonusSchema);
 

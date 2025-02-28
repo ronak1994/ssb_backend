@@ -7,6 +7,31 @@ import mongoose from 'mongoose';
 import fs from 'fs';
 import path from 'path'; 
 import Web3 from 'web3';
+import dotenv from 'dotenv';
+
+dotenv.config({ path: path.resolve(process.cwd(), '../../../.env') });
+
+  // Define contract details
+  const WEB3_PROVIDER = process.env.WEB3_PROVIDER;
+  const nftAddresses = {
+      Green: process.env.GREEN_NFT,
+      Gold: process.env.GOLD_NFT,
+      Silver: process.env.SILVER_NFT,
+      Black: process.env.WHITE_NFT,
+      White: process.env.BLACK_NFT,
+  };
+  
+      // Load ABI from file
+      const ABI = JSON.parse(fs.readFileSync(path.resolve(process.cwd(), 'NFTABI.json'), 'utf-8'));
+
+      // Ensure ABI is an array
+      if (!Array.isArray(ABI)) {
+          throw new Error("❌ ABI is not an array! Check NFTABI.json format.");
+      }
+
+      // Initialize Web3
+      const web3 = new Web3(new Web3.providers.HttpProvider(WEB3_PROVIDER));
+
 
 /**
  * Fetch all users who were referred by the given user.
@@ -42,27 +67,6 @@ const userByRefferalCode = async (refferalCode) => {
           throw new Error('User not found or has no referral code');
       }
 
-      // Load ABI from file
-      const ABI = JSON.parse(fs.readFileSync(path.resolve(process.cwd(), 'NFTABI.json'), 'utf-8'));
-
-      // Ensure ABI is an array
-      if (!Array.isArray(ABI)) {
-          throw new Error("❌ ABI is not an array! Check NFTABI.json format.");
-      }
-
-      // Define contract details
-      const WEB3_PROVIDER = "https://data-seed-prebsc-1-s1.binance.org:8545/"; // Use correct provider URL
-      const nftAddresses = {
-          Green: "0x400fBDE10146750d64bbA3DD5f1bE177F2822BB3",
-          Gold: "0x7E3e103853E23F78cfCC43B3309cE2E6659C072A",
-          Silver: "0x3DaD996bC84ABcB22dbbB2a9e2a2Bf994eA8B93c",
-          Black: "0x7f70F3737f856a07bD428dfc1038957F976F1562",
-          White: "0xAa84dd899F0831A956210b7016cC3817Ab537B1a",
-      };
-
-      // Initialize Web3
-      const web3 = new Web3(new Web3.providers.HttpProvider(WEB3_PROVIDER));
-
       // Find NFT address of highest priority NFT
       const userWallet = user.decentralizedWalletAddress;
       const nftCounts = {};
@@ -73,6 +77,7 @@ const userByRefferalCode = async (refferalCode) => {
           
           try {
               const nftCount = await blockchainContract.methods.getOwnerTokenIDs(userWallet).call();
+              console.log(nftCount);
               nftCounts[nftName] = nftCount.length ? nftCount.length : 0;
 
               // Assign NFT address if count is at least 1 and no higher-priority NFT has been set
@@ -97,6 +102,47 @@ const userByRefferalCode = async (refferalCode) => {
   }
 };
 
+const getUserWatches = async(decentralizedWalletAddress)=>{
+  try {
+    const watchCounts = { Green: 0, Gold: 0, Silver: 0 };
+
+    // NFT watch criteria
+    const watchCriteria = {
+        Green: 250,
+        Gold: 500,
+        Silver: 1000
+    };
+
+    for (const [nftName, nftAddress] of Object.entries(nftAddresses)) {
+        // Skip NFTs that are not eligible for watches
+        if (!watchCriteria[nftName]) continue;
+
+        const blockchainContract = new web3.eth.Contract(ABI, nftAddress);
+
+        try {
+            // Fetch owned NFT token IDs
+            let nftTokenIds = await blockchainContract.methods.getOwnerTokenIDs(decentralizedWalletAddress).call();
+
+            // Convert BigInt values to normal numbers
+            nftTokenIds = nftTokenIds.map(Number);
+         
+
+            // Count tokens that qualify for a watch
+            watchCounts[nftName] = nftTokenIds.filter(tokenId => tokenId < watchCriteria[nftName]).length;
+
+        } catch (error) {
+            console.error(`❌ Error fetching NFT count for ${nftName}:`, error.message);
+        }
+    }
+
+  
+    return watchCounts;
+
+} catch (error) {
+    console.error("❌ Error fetching user watch data:", error);
+    return { Green: 0, Gold: 0, Silver: 0 };
+}
+}
 
 const getUsersBlockchain = async (userId) => {
   try {
@@ -301,4 +347,4 @@ const resetPassword = async (userId, newPassword) => {
 };
 
 export { createUser,getUserWalletAndNft,
-   findOrCreateUser, userByRefferalCode, activateBlockchainService, getUsersBlockchain, deleteUser, getFollowersService, getUserByUsername, getAllUsersService,  getUserByReferredby, resetPassword, completeRegistration, getUserByEmail, getUserById, updateUserById };
+   findOrCreateUser, userByRefferalCode, getUserWatches, activateBlockchainService, getUsersBlockchain, deleteUser, getFollowersService, getUserByUsername, getAllUsersService,  getUserByReferredby, resetPassword, completeRegistration, getUserByEmail, getUserById, updateUserById };

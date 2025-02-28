@@ -6,10 +6,13 @@ import {
 import User from '../models/user.model.js';
 import TransactionHistory from '../models/transactions.model.js';
 import InvestorBonus from '../models/investorBonus.model.js';
+import dotenv from 'dotenv';
+import fs from 'fs';
+import path from 'path';
 
-import {
-  saveWatchTransaction
-} from './watch.service.js';
+const envPath = path.resolve(process.cwd(), ".env");
+
+dotenv.config({ path: envPath });
 
 
 
@@ -113,15 +116,7 @@ const savePurchaseTransaction = async (transactionData) => {
   });
   await user.save();
 
-  // Step 4: Save watch Transaction
-  saveWatchTransaction(userId, nftAddress, tokenId).then(transaction => {
-          console.log("✅ Transaction result:", transaction);
-      })
-      .catch(error => {
-          console.error("❌ Error:", error.message);
-      });
-
-   // Step 5: Save purchase Transaction    
+   // Step 4: Save purchase Transaction    
   const purchase = await TransactionHistory.create({
       userId,
       transactionType: "purchase",
@@ -149,16 +144,17 @@ const savePurchaseTransaction = async (transactionData) => {
   });
 
    // Step 7: Save Refferal Bonus Transaction (if applicable)
-   const refferalPercent ={
+   const refferalPercent = {
     "0xAa84dd899F0831A956210b7016cC3817Ab537B1a": ".07",
     "0x7f70F3737f856a07bD428dfc1038957F976F1562": ".07",
     "0x3DaD996bC84ABcB22dbbB2a9e2a2Bf994eA8B93c": ".08",
     "0x7E3e103853E23F78cfCC43B3309cE2E6659C072A": ".10",
-    "0x400fBDE10146750d64bbA3DD5f1bE177F2822BB3": ".15%"
+    "0x400fBDE10146750d64bbA3DD5f1bE177F2822BB3": ".15"
   };
    const refPecent = refferalPercent[referrerNftAddress];
+   
    const referralBonusAmount1 = amount1 * refPecent ;
-
+   
    if(referrerUserId){
     await TransactionHistory.create({
       userId:referrerUserId,
@@ -231,6 +227,8 @@ const fetchActivePhase = async () => {
       throw new Error(`Error fetching active phase: ${error.message}`);
   }
 };
+
+
 
 
 export {

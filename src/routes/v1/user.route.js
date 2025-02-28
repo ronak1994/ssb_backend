@@ -53,7 +53,7 @@ router.get('/followers/:userId', validate(userValidation.getFollowers), userCont
 router.get('/user-by-refferal-code/:refferalCode', validate(userValidation.refCode), userController.getUserByRefferalCode);
 
 //get watches by userID
-router.get('/watches/:userId', validate(userValidation.getFollowers), userController.getWatchesByUserId);
+router.get('/watches/:decentralizedWalletAddress', validate(userValidation.getWatches), userController.getWatchesByUserId);
 
 
 export default router;

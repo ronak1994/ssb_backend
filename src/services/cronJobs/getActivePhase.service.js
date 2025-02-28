@@ -6,14 +6,20 @@ import cron from 'node-cron';
 import { Phase } from '../../models/blockchain.model.js'; // Import Phase model
 import logger from '../../config/logger.js';
 
-dotenv.config();
+const envPath = path.resolve(process.cwd(), "../../../../../../.env");
+
+dotenv.config({ path: envPath });
+
 
 // Load ABI from the file (Ensure the file exists)
-const ABI = JSON.parse(fs.readFileSync(path.resolve(process.cwd(), 'contractABI.json'), 'utf-8'));
+const ABI = JSON.parse(fs.readFileSync(path.resolve(process.cwd(), 'DistributionABI.json'), 'utf-8'));
+const NFTABI = JSON.parse(fs.readFileSync(path.resolve(process.cwd(), 'NFTABI.json'), 'utf-8'));
 
 // Define contract details
-const CONTRACT_ADDRESS = "0xa40c02AF413204B81718c8A982E00a85E1f21694"; // Replace with your contract address
-const WEB3_PROVIDER = "https://data-seed-prebsc-1-s1.binance.org:8545/"; // Use correct provider URL
+const CONTRACT_ADDRESS = process.env.DISTRIBUATION; // Replace with your contract address
+const WEB3_PROVIDER = process.env.WEB3_PROVIDER;; // Use correct provider URL
+
+console.log(process.env.DISTRIBUATION);
 
 // Initialize Web3
 const web3 = new Web3(new Web3.providers.HttpProvider(WEB3_PROVIDER));
@@ -52,12 +58,15 @@ const updateActivePhase = async () => {
       { isActive: true },
       { new: true, upsert: true }
     );
-
+   
     logger.info(`✅ Active Phase Updated: ${updatedPhase.name}`);
   } catch (error) {
     logger.error(`❌ Error updating active phase: ${error.message}`);
   }
 };
+
+
+
 
 // 🕒 Schedule job to run **every 6 hours**
 cron.schedule('0 */6 * * *', async () => {

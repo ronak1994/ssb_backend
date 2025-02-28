@@ -2,6 +2,15 @@ import mongoose from 'mongoose';
 import { Blockchain, GlobalSupply, Phase } from '../src/models/blockchain.model.js';
 import Discount from '../src/models/discount.model.js';
 import { Faq } from '../src/models/info.model.js';
+import dotenv from 'dotenv';
+import fs from 'fs';
+import path from 'path';
+
+const envPath = path.resolve(process.cwd(), "../.env");
+
+dotenv.config({ path: envPath });
+
+console.log(process.env.GREEN_NFT);
 
 const blockchainData = [
   {
@@ -20,7 +29,7 @@ const blockchainData = [
     ],
     dailyMineCap: 2299,
     contractAddress: "0x123456789abcdef",
-    nftAddress:"0x400fBDE10146750d64bbA3DD5f1bE177F2822BB3",
+    nftAddress:process.env.GREEN_NFT,
     tokenUri:"https://teal-obvious-tahr-119.mypinata.cloud/ipfs/bafkreibjyr4bcacbnkrvqxgrvjl3yutyiaife3wv4udvfbxowamzwgng7u",
     icon: "../../assets/icons/Green_Icon.png",
     gradient: "../../assets/images/CardTopGreen.png",
@@ -65,7 +74,7 @@ const blockchainData = [
       { phaseName: "D", phaseBonus: 7500, investorBonus: { days: 30, dailyBonusToken: 167 }, watchBonus: { days: 450, dailyBonusToken: 50 }, totalWithdrawalLimit: 2000 },
       { phaseName: "E", phaseBonus: 10000, investorBonus: { days: 30, dailyBonusToken: 167 }, watchBonus: { days: 450, dailyBonusToken: 50 }, totalWithdrawalLimit: 2500 }
     ],
-    nftAddress:"0x7E3e103853E23F78cfCC43B3309cE2E6659C072A",
+    nftAddress:process.env.GOLD_NFT,
     dailyMineCap: 1919,
     contractAddress: "0x123456789abcdef",
     icon: "../../assets/icons/Gold_Icon.png",
@@ -90,7 +99,7 @@ const blockchainData = [
       { phaseName: "E", phaseBonus: 1000, investorBonus: { days: 30, dailyBonusToken: 16 }, watchBonus: { days: 300, dailyBonusToken: 10 }, totalWithdrawalLimit: 500 }
     ],
     dailyMineCap: 1534,
-    nftAddress:"0x3DaD996bC84ABcB22dbbB2a9e2a2Bf994eA8B93c",
+    nftAddress:process.env.SILVER_NFT,
     contractAddress: "0x123456789abcdef",
     icon: "../../assets/icons/Silver_Icon_Big.png",
     gradient: "../../assets/images/CardTopSilver.png",
@@ -136,7 +145,7 @@ const blockchainData = [
       { phaseName: "D", phaseBonus: 750, investorBonus: { days: 30, dailyBonusToken: 5 }, totalWithdrawalLimit: 300 },
       { phaseName: "E", phaseBonus: 500, investorBonus: { days: 30, dailyBonusToken: 5 }, totalWithdrawalLimit: 250 }
     ],
-    nftAddress:"0x7f70F3737f856a07bD428dfc1038957F976F1562",
+    nftAddress:process.env.BLACK_NFT,
     dailyMineCap: 1150,
     contractAddress: "0x123456789abcdef",
     icon: "../../assets/icons/Black_Icon.png",
@@ -182,7 +191,7 @@ const blockchainData = [
       { phaseName: "D", phaseBonus: 150, investorBonus: { days: 30, dailyBonusToken: 1 }, totalWithdrawalLimit: 40 },
       { phaseName: "E", phaseBonus: 100, investorBonus: { days: 30, dailyBonusToken: 1 }, totalWithdrawalLimit: 50 }
     ],
-    nftAddress:"0xAa84dd899F0831A956210b7016cC3817Ab537B1a",
+    nftAddress:process.env.WHITE_NFT,
     dailyMineCap: 767,
     contractAddress: "0x123456789abcdef",
     tokenUri: "https://teal-obvious-tahr-119.mypinata.cloud/ipfs/bafkreibjyr4bcacbnkrvqxgrvjl3yutyiaife3wv4udvfbxowamzwgng7u",

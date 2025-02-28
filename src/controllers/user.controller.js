@@ -5,10 +5,10 @@ import { sendOtp,sendOtp2, verifyOtp, verifyResetOtp, loginUserWithEmailAndPassw
 import { createUser, completeRegistration, deleteUser, 
   activateBlockchainService, getFollowersService, getUserByReferredby, 
   getAllUsersService, resetPassword, getUserByUsername, 
-  userByRefferalCode, updateUserById, getUserById, getUsersBlockchain } from '../services/user.service.js';
+  userByRefferalCode, updateUserById, getUserById, getUsersBlockchain, getUserWatches } from '../services/user.service.js';
 import { OAuth2Client } from 'google-auth-library';
 
-import { getUserWatches } from '../services/watch.service.js'
+
 
 import mongoose from 'mongoose';
 
@@ -105,8 +105,8 @@ const checkUsername = catchAsync(async (req, res) => {
 /**get watches by user id***/
 
 const getWatchesByUserId = catchAsync(async (req, res) => {
-  const { userId } = req.params;
-  const watches = await getUserWatches(userId);
+  const { decentralizedWalletAddress } = req.params;
+  const watches = await getUserWatches(decentralizedWalletAddress);
    
   if (watches) {
     res.status(httpStatus.OK).send({ exists: true, message: 'watches exists', watches });
