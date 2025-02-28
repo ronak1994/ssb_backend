@@ -1,4 +1,4 @@
-import * as investorBonusService from "../services/investorbonus.service.js";
+import * as investorBonusService from '../services/investorbonus.service.js'
 
 /**
  * Create a new InvestorBonus
