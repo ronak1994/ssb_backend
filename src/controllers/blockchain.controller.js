@@ -30,6 +30,12 @@ const purchaseBlockchain = catchAsync(async (req, res) => {
   res.status(httpStatus.CREATED).json({ message: 'Transaction recorded successfully', data: transaction });
 })
 
+const saveSwapping = catchAsync(async (req, res) => {
+  const transaction = await blockchainService.saveSwapTransaction(req.body);
+ 
+  res.status(httpStatus.CREATED).json({ message: 'Transaction recorded successfully', data: transaction });
+})
+
 
 /**
  * Controller to handle fetching global supply data.
@@ -66,4 +72,5 @@ const getActivePhase = async (req, res) => {
   }
 };
 
-export { getAllBlockchains, getActivePhase, getAllPhases, fetchGlobalSupply, getBlockchainById, purchaseBlockchain };
+export { getAllBlockchains, getActivePhase,saveSwapping,
+   getAllPhases, fetchGlobalSupply, getBlockchainById, purchaseBlockchain };

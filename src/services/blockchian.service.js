@@ -68,6 +68,35 @@ const getBlockchainById = async (blockchainId) => {
   return Blockchain.findById(blockchainId);
 };
 
+const saveSwapTransaction = async (transactionData) => {
+    const {
+        userId,
+        senderWalletId,
+        transactionHash,
+        amount,
+        currency
+    } = transactionData;
+
+    // **Ensure amount is a valid number**
+    const amount1 = Number(amount);
+    if (isNaN(amount1)) {
+        throw new Error('Amount must be a valid number');
+    }
+
+    const purchase = await TransactionHistory.create({
+        userId,
+        transactionType: "swap",
+        senderWalletId,
+        receiverWalletId:"company_wallet",
+        amount: amount1,
+        currency,
+        transactionHash
+    });
+
+    return purchase;
+}
+
+
 
 const savePurchaseTransaction = async (transactionData) => {
 
@@ -237,5 +266,6 @@ export {
   fetchActivePhase,
   getBlockchainById,
   getGlobalSupplyData,
+  saveSwapTransaction,
   savePurchaseTransaction
 };

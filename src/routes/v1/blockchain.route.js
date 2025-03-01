@@ -35,6 +35,8 @@ router.post('/purchaseBlockchain', validate(blockchainValidation.purchase), bloc
 router.post('/validateDiscountCode', validate(discountValidation.validateDiscount), discountController.checkDiscount);
 router.post('/applyDiscountCode', validate(discountValidation.applyDiscount), discountController.applyDiscountCode);
 
+router.post('/saveSwap', validate(blockchainValidation.swap), blockchainController.saveSwapping);
+
 
 
 export default router;

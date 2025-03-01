@@ -19,4 +19,14 @@ const purchase = {
     }),
   };
   
-  export { purchase };
+
+  const swap = {
+    body: Joi.object().keys({
+    userId:Joi.string().required(),
+    senderWalletId:Joi.string().required(),
+    transactionHash:Joi.string().required(),
+    amount:Joi.number().required(),
+    currency:Joi.string().required(),
+  }),
+};
+  export { purchase, swap };
