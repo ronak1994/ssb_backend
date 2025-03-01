@@ -31,9 +31,10 @@ const purchaseBlockchain = catchAsync(async (req, res) => {
 })
 
 const saveSwapping = catchAsync(async (req, res) => {
-  const transaction = await blockchainService.saveSwapTransaction(req.body);
- 
-  res.status(httpStatus.CREATED).json({ message: 'Transaction recorded successfully', data: transaction });
+  console.log(req.body);
+  //const transaction = await blockchainService.saveSwapTransaction(req.body);
+  
+ // res.status(httpStatus.CREATED).json({ message: 'Transaction recorded successfully', data: transaction });
 })
 
 
