@@ -22,14 +22,12 @@ router.get('/transactions/user/:userId', validate(transactionValidation.getByUse
 router.get('/transactions/user/:userId/type/:transactionType', validate(transactionValidation.getByUserAndType), transactionController.getTransactionsByUserAndType);
 
 
-// 🚀 Get all blockchains
-router.get('/', blockchainController.getAllBlockchains);
 
 // 🚀 Get global data
 router.get('/getActivePhase', blockchainController.getActivePhase);
 router.get('/getPhaseData', blockchainController.getAllPhases);
 router.get('/getGlobalSupply', blockchainController.fetchGlobalSupply);
-router.get('/:blockchainId', blockchainController.getBlockchainById);
+
 
 // 🚀 Purchase blockchain
 router.post('/purchaseBlockchain', validate(blockchainValidation.purchase), blockchainController.purchaseBlockchain);
@@ -39,7 +37,21 @@ router.post('/validateDiscountCode', validate(discountValidation.validateDiscoun
 router.post('/applyDiscountCode', validate(discountValidation.applyDiscount), discountController.applyDiscountCode);
 
 
+// ✅ Move `/:blockchainId` to the end
+router.get('/:blockchainId', (req, res, next) => {
+    const { blockchainId } = req.params;
 
+    // 🚨 Prevent treating named routes as IDs
+    if (blockchainId === 'saveSwap') {
+        return res.status(400).json({ message: "Invalid ID format" });
+    }
+
+    blockchainController.getBlockchainById(req, res, next);
+});
+
+
+// 🚀 Get all blockchains
+router.get('/', blockchainController.getAllBlockchains);
 
 export default router;
    
