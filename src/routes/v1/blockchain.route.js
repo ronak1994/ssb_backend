@@ -9,6 +9,9 @@ import transactionValidation from '../../validations/transaction.validation.js';
 
 const router = express.Router();
 
+router.post('/saveSwap', validate(blockchainValidation.swap), blockchainController.saveSwapping);
+
+
 // 🚀 Fetch all transactions
 router.get('/transactions', transactionController.getAllTransactions);
 
@@ -35,7 +38,6 @@ router.post('/purchaseBlockchain', validate(blockchainValidation.purchase), bloc
 router.post('/validateDiscountCode', validate(discountValidation.validateDiscount), discountController.checkDiscount);
 router.post('/applyDiscountCode', validate(discountValidation.applyDiscount), discountController.applyDiscountCode);
 
-router.post('/saveSwap', validate(blockchainValidation.swap), blockchainController.saveSwapping);
 
 
 
