@@ -12,6 +12,14 @@ const router = express.Router();
 router.post('/saveSwap', validate(blockchainValidation.swap), blockchainController.saveSwapping);
 
 
+// 🚀 Purchase blockchain
+router.post('/purchaseBlockchain', validate(blockchainValidation.purchase), blockchainController.purchaseBlockchain);
+
+// 🚀 Discount codes
+router.post('/validateDiscountCode', validate(discountValidation.validateDiscount), discountController.checkDiscount);
+router.post('/applyDiscountCode', validate(discountValidation.applyDiscount), discountController.applyDiscountCode);
+
+
 // 🚀 Fetch all transactions
 router.get('/transactions', transactionController.getAllTransactions);
 
@@ -27,14 +35,6 @@ router.get('/transactions/user/:userId/type/:transactionType', validate(transact
 router.get('/getActivePhase', blockchainController.getActivePhase);
 router.get('/getPhaseData', blockchainController.getAllPhases);
 router.get('/getGlobalSupply', blockchainController.fetchGlobalSupply);
-
-
-// 🚀 Purchase blockchain
-router.post('/purchaseBlockchain', validate(blockchainValidation.purchase), blockchainController.purchaseBlockchain);
-
-// 🚀 Discount codes
-router.post('/validateDiscountCode', validate(discountValidation.validateDiscount), discountController.checkDiscount);
-router.post('/applyDiscountCode', validate(discountValidation.applyDiscount), discountController.applyDiscountCode);
 
 
 // ✅ Move `/:blockchainId` to the end
