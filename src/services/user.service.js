@@ -62,7 +62,7 @@ const userByRefferalCode = async (refferalCode) => {
   try {
       // Fetch the user's referral code
       const user = await User.findOne({ "referralCode": refferalCode })
-          .select("decentralizedWalletAddress userId nftAddress");
+          .select("decentralizedWalletAddress userId nftAddress blockchainIds");
       if (!user) {
           throw new Error('User not found or has no referral code');
       }
