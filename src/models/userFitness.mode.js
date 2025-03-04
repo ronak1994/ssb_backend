@@ -20,13 +20,7 @@ const stepEntrySchema = new mongoose.Schema({
 
 const userFitnessSchema = new mongoose.Schema(
   {
-    userFitnessId: {
-      type: mongoose.Schema.Types.ObjectId,
-      auto: true, // Automatically generates unique ID
-      unique: true,
-      required: true,
-      index: true,
-    },
+  
     userId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
