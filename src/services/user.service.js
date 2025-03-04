@@ -48,7 +48,7 @@ const getFollowersService = async (userId) => {
 
     // Find users who signed up using this referral code
     const followers = await User.find({ referredBy: user.referralCode })
-      .select('name username email decentralizedWalletAddress createdAt')
+      .select('name username email decentralizedWalletAddress createdAt blockchainIds')
       .lean();
 
     return followers;
