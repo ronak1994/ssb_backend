@@ -183,6 +183,8 @@ const savePurchaseTransaction = async (transactionData) => {
    const refPecent = refferalPercent[referrerNftAddress];
    
    const referralBonusAmount1 = amount1 * refPecent ;
+
+   console.log('Ref bonus given to '+referrerUserId+' '+referralBonusAmount1);
    
    if(referrerUserId){
     await TransactionHistory.create({
