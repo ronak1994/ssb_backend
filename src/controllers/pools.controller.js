@@ -22,9 +22,9 @@ const saveDailyPoolA = catchAsync(async (req, res) => {
     
     let {decentralizedWalletAddress, nftAddress} = await getUserWalletAndNft(userId);
   
-    if(nftAddress==null){
-      nftAddress="free";
-    }
+    if (!nftAddress) { 
+      nftAddress = "free";  // ✅ Ensure nftAddress has a value
+  }
     console.log(nftAddress);
     const rewardResponse = await saveDailyReward(userId, decentralizedWalletAddress, nftAddress, 'A');
 

@@ -11,6 +11,7 @@ const dailyRewardSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "User", // Reference to User model
       required: true,
+      default: "free"
     },
     nftAddress: {
       type: String,
