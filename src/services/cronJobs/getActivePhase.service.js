@@ -16,10 +16,10 @@ const ABI = JSON.parse(fs.readFileSync(path.resolve(process.cwd(), 'Distribution
 const NFTABI = JSON.parse(fs.readFileSync(path.resolve(process.cwd(), 'NFTABI.json'), 'utf-8'));
 
 // Define contract details
-const CONTRACT_ADDRESS = process.env.DISTRIBUATION; // Replace with your contract address
+const CONTRACT_ADDRESS = process.env.DISTRIBUTION; // Replace with your contract address
 const WEB3_PROVIDER = process.env.WEB3_PROVIDER;; // Use correct provider URL
 
-console.log(process.env.DISTRIBUATION);
+console.log(process.env.DISTRIBUTION);
 
 // Initialize Web3
 const web3 = new Web3(new Web3.providers.HttpProvider(WEB3_PROVIDER));
@@ -73,5 +73,7 @@ cron.schedule('0 */6 * * *', async () => {
   logger.info('⏳ Running Active Phase Update Cron Job...');
   await updateActivePhase();
 });
+
+
 
 export default updateActivePhase;
