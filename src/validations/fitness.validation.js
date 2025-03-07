@@ -17,4 +17,10 @@ const getSteps = {
   }),
 };
 
-export { updateSteps, getSteps };
+const analysis = {
+  params: Joi.object().keys({
+    userId:Joi.string().required()
+  })
+}
+
+export { updateSteps, getSteps, analysis };

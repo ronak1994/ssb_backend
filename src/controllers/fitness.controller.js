@@ -21,4 +21,8 @@ const getSteps = catchAsync(async (req, res) => {
   res.status(httpStatus.OK).json(stepData);
 });
 
-export { updateSteps, getSteps };
+const getAnalysis = catchAsync(async (req, res) => {
+  res.status(httpStatus.OK).json({"stepData":"ss"});
+})
+
+export { updateSteps, getSteps, getAnalysis };
