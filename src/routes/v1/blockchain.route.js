@@ -20,6 +20,17 @@ router.post('/validateDiscountCode', validate(discountValidation.validateDiscoun
 router.post('/applyDiscountCode', validate(discountValidation.applyDiscount), discountController.applyDiscountCode);
 
 
+
+//distribute 30 day bonus
+router.post('/distribute30day',  transactionController.distribute30day);
+
+
+//distribute 50k rewards
+router.post('/distribute50k',  transactionController.distribute50k);
+
+
+
+
 // 🚀 Fetch all transactions
 router.get('/transactions', transactionController.getAllTransactions);
 
@@ -48,6 +59,8 @@ router.get('/:blockchainId', (req, res, next) => {
 
     blockchainController.getBlockchainById(req, res, next);
 });
+
+
 
 
 // 🚀 Get all blockchains

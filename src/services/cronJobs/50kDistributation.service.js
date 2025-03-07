@@ -7,6 +7,7 @@ import path from 'path';
 import fs from 'fs';
 import User from "../../models/user.model.js";
 import TransactionHistory from "../../models/transactions.model.js";
+import { isArray } from 'util';
 
 dotenv.config({ path: path.resolve(process.cwd(), '../../../.env') });
 
@@ -143,7 +144,7 @@ async function getTransactionDetails(txHash, txType) {
 }
 
 // 🎯 Distribute Investor Bonus & Save Transactions
-async function distributeBonusForAllNFTs() {
+export const distributeBonusForAllNFTs = async ()=> {
     for (const [tier, nftAddress] of Object.entries(nftAddresses)) {
         if (nftAddress) {  
             try {
@@ -184,7 +185,7 @@ function splitBatches(poolA, poolB) {
 
 
 //pool A & Pool B bonus
-const distribute50kDailyRewards = async () => {
+export const distribute50kDailyRewards = async () => {
     try {
        
         const poolA = await DailyReward.find({ poolType: "A" }).select("decentralizedWalletAddress");
@@ -192,31 +193,31 @@ const distribute50kDailyRewards = async () => {
         
         const poolAWallets = poolA.map(doc => doc.decentralizedWalletAddress);
         const poolBWallets = poolB.map(doc => doc.decentralizedWalletAddress);
-        
-        console.log(`Total eligible users: Pool A - ${poolA.length}, Pool B - ${poolB.length}`);
+       
+        console.log(`Total eligible users: Pool A - ${poolAWallets}, Pool B - ${poolBWallets}`);
         
         if(poolAWallets.length>0){
-        const txA = sendTransaction(contract.methods.distribute50kDailyDistribution(poolAWallets, []));
+        const txA = contract.methods.distribute50kDailyDistribution(poolAWallets, []);
         
         try {
             const gas = await txA.estimateGas({ from: account.address });
             console.log(`Estimated Gas: ${gas}`);
             
-            const txHash = await sendTransaction(txA);
-            await getTransactionDetails(txHash,"pool_A_reward");
+           const txHash = await sendTransaction(txA);
+           await getTransactionDetails(txHash,"pool_A_reward");
         } catch (error) {
             console.error("Transaction Failed! Revert Reason:", error.message);
         }
         }
 
         if(poolBWallets.length){
-        const txB = sendTransaction(contract.methods.distribute50kDailyDistribution([], poolBWallets));
+        const txB = contract.methods.distribute50kDailyDistribution([], poolBWallets);
         try {
             const gas = await txB.estimateGas({ from: account.address });
             console.log(`Estimated Gas: ${gas}`);
             
-            const txHash = await sendTransaction(txB);
-            await getTransactionDetails(txHash,"pool_B_reward");
+           const txHash = await sendTransaction(txB);
+           await getTransactionDetails(txHash,"pool_B_reward");
         } catch (error) {
             console.error("Transaction Failed! Revert Reason:", error.message);
         }
@@ -225,6 +226,7 @@ const distribute50kDailyRewards = async () => {
     } catch (error) {
         console.error('Error distributing daily 50k rewards:', error);
     }
+   
 };
 
 
@@ -235,6 +237,6 @@ setTimeout(async() => {
 
   console.log("This function runs after 10 seconds.");
 
-  }, 10000); // 10000 milliseconds = 10 seconds
+  }, 20000); // 10000 milliseconds = 10 seconds
 
 console.log('⏳ Cron job set to run daily at GMT+00.');
