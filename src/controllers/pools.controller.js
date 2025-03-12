@@ -19,7 +19,7 @@ const saveDailyPoolA = catchAsync(async (req, res) => {
   if (userFitness.dailyRewardSteps >= 1500) {
     // If step condition is met, save Pool A entry
     const response = await savePoolEntry(userId, 'PoolA', userFitness.dailyRewardSteps);
-    
+   
     let {decentralizedWalletAddress, nftAddress} = await getUserWalletAndNft(userId);
   
     if (!nftAddress) { 
@@ -47,6 +47,14 @@ const saveDailyPoolB = catchAsync(async (req, res) => {
   if (userFitness.dailyRewardSteps >= 10000) {
     // If step condition is met, save Pool B entry
     const response = await savePoolEntry(userId, 'PoolB', userFitness.dailyRewardSteps);
+    let {decentralizedWalletAddress, nftAddress} = await getUserWalletAndNft(userId);
+  
+    if (!nftAddress) { 
+      nftAddress = "free";  // ✅ Ensure nftAddress has a value
+  }
+    console.log(nftAddress);
+    const rewardResponse = await saveDailyReward(userId, decentralizedWalletAddress, nftAddress, 'B');
+
     res.status(httpStatus.CREATED).json(response);
   } else {
     res.status(httpStatus.BAD_REQUEST).json({ message: 'Insufficient steps for Pool B' });
