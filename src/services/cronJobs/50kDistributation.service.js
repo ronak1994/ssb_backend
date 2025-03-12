@@ -197,32 +197,32 @@ export const distribute50kDailyRewards = async () => {
        
         console.log(`Total eligible users: Pool A - ${poolAWallets}, Pool B - ${poolBWallets}`);
         
-        // if(poolAWallets.length>0){
-        // const txA = contract.methods.distribute50kDailyDistribution(poolAWallets, []);
+        if(poolAWallets.length>0){
+        const txA = contract.methods.distribute50kDailyDistribution(poolAWallets, []);
         
-        // try {
-        //     const gas = await txA.estimateGas({ from: account.address });
-        //     console.log(`Estimated Gas: ${gas}`);
+        try {
+            const gas = await txA.estimateGas({ from: account.address });
+            console.log(`Estimated Gas: ${gas}`);
             
-        //    const txHash = await sendTransaction(txA);
-        //    await getTransactionDetails(txHash,"pool_A_reward");
-        // } catch (error) {
-        //     console.error("Transaction Failed! Revert Reason:", error.message);
-        // }
-        // }
+           const txHash = await sendTransaction(txA);
+           await getTransactionDetails(txHash,"pool_A_reward");
+        } catch (error) {
+            console.error("Transaction Failed! Revert Reason:", error.message);
+        }
+        }
 
-        // if(poolBWallets.length){
-        // const txB = contract.methods.distribute50kDailyDistribution([], poolBWallets);
-        // try {
-        //     const gas = await txB.estimateGas({ from: account.address });
-        //     console.log(`Estimated Gas: ${gas}`);
+        if(poolBWallets.length){
+        const txB = contract.methods.distribute50kDailyDistribution([], poolBWallets);
+        try {
+            const gas = await txB.estimateGas({ from: account.address });
+            console.log(`Estimated Gas: ${gas}`);
             
-        //    const txHash = await sendTransaction(txB);
-        //    await getTransactionDetails(txHash,"pool_B_reward");
-        // } catch (error) {
-        //     console.error("Transaction Failed! Revert Reason:", error.message);
-        // }
-        // }
+           const txHash = await sendTransaction(txB);
+           await getTransactionDetails(txHash,"pool_B_reward");
+        } catch (error) {
+            console.error("Transaction Failed! Revert Reason:", error.message);
+        }
+        }
 
     } catch (error) {
         console.error('Error distributing daily 50k rewards:', error);
