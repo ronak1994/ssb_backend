@@ -85,11 +85,7 @@ async function getTransactionDetails(txHash, txType) {
             return;
         }
 
-        let amount = web3.utils.fromWei(tx.value, "ether"); 
         let currency = "BNB";
-        let sender = tx.from;
-        let receiver = tx.to;
-
         console.log(`🔹 TX Type: ${tx.input === "0x" ? "BNB Transfer" : "Contract Interaction"}`);
 
         if (tx.input !== "0x") {
@@ -97,51 +93,51 @@ async function getTransactionDetails(txHash, txType) {
             if (receipt && receipt.logs.length > 0) {
                 for (const log of receipt.logs) {
                     if (log.topics[0] === web3.utils.sha3("Transfer(address,address,uint256)")) {
-                        sender = `0x${log.topics[1].slice(26)}`;
-                        receiver = `0x${log.topics[2].slice(26)}`;
-                        amount = BigInt(log.data).toString(); 
+                        let sender = `0x${log.topics[1].slice(26)}`;
+                        let receiver = `0x${log.topics[2].slice(26)}`;
+                        let amount = BigInt(log.data).toString();
 
-                        // Load token ABI and fetch token symbol
+                        // Load token contract to get symbol
                         const tokenContract = new web3.eth.Contract(
                             JSON.parse(fs.readFileSync(path.resolve(process.cwd(), "SSBABI.json"), "utf-8")),
                             log.address
                         );
                         currency = await tokenContract.methods.symbol().call();
-                        amount = web3.utils.fromWei(amount, "ether"); 
+                        amount = web3.utils.fromWei(amount, "ether");
+
+                        // Find users with matching receiver wallet
+                        const users = await User.find({ decentralizedWalletAddress: receiver });
+
+                        if (users.length === 0) {
+                            console.log(`⚠️ No users found for wallet address: ${receiver}`);
+                            continue; // Skip saving if no user found
+                        }
+
+                        // Save each transaction for all users
+                        for (const user of users) {
+                            const transaction = new TransactionHistory({
+                                userId: user._id,
+                                transactionType: txType,
+                                amount,
+                                currency,
+                                transactionHash: txHash,
+                                senderWalletId: sender,
+                                receiverWalletId: receiver,
+                                transactionStatus: "completed",
+                            });
+
+                            await transaction.save();
+                            console.log(`✅ Transaction saved for User ID: ${user._id}`);
+                        }
                     }
                 }
             }
         }
-
-        // 🔍 Fetch userId from receiverWalletId
-        const users = await User.find({ decentralizedWalletAddress: receiver });
-
-        if (users.length === 0) {
-            console.log(`⚠️ No users found for wallet address: ${receiver}`);
-            return;
-        }
-
-        // 📝 Save transactions for each user
-        for (const user of users) {
-            const transaction = new TransactionHistory({
-                userId: user._id,
-                transactionType: txType,
-                amount,
-                currency,
-                transactionHash: txHash,
-                senderWalletId: sender,
-                receiverWalletId: receiver,
-                transactionStatus: "completed",
-            });
-
-            await transaction.save();
-            console.log(`✅ Transaction saved for User ID: ${user._id}`);
-        }
-
     } catch (error) {
         console.error("❌ Error fetching transaction:", error);
     }
 }
+
 
 // 🎯 Distribute Investor Bonus & Save Transactions
 export const distributeBonusForAllNFTs = async ()=> {
