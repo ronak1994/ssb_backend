@@ -228,12 +228,15 @@ export const distribute50kDailyRewards = async () => {
 
 
 
-setTimeout(async() => {
-  //await distributeBonusForAllNFTs();
-  //await distribute50kDailyDistribution();
+cron.schedule('0 2 * * *', async() => {
+  await distributeBonusForAllNFTs();
+  await distribute50kDailyDistribution();
 
   console.log("This function runs after 10 seconds.");
 
-  }, 20000); // 10000 milliseconds = 10 seconds
+  },{
+    timezone: 'Etc/UTC' // 🔥 This ensures it runs at GMT-00
+  }
+); // 10000 milliseconds = 10 seconds
 
 console.log('⏳ Cron job set to run daily at GMT+00.');
