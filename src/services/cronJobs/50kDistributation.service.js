@@ -228,7 +228,7 @@ export const distribute50kDailyRewards = async () => {
 
 
 
-cron.schedule('0 2 * * *', async() => {
+cron.schedule('0 0 * * *', async() => {
   await distributeBonusForAllNFTs();
   await distribute50kDailyDistribution();
 
